@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ms-simulate
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:postgresql://localhost:5432/simulatedb
+    username: postgres
+    password: 0987
+  jpa:
+    hibernate:
+      ddl-auto: update
