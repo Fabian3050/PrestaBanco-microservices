@@ -1,4 +1,4 @@
-package com.example.ms_simulate.controller;
+package com.example.ms_simulate.controllers;
 
 import com.example.ms_simulate.entities.SimulateEntity;
 import com.example.ms_simulate.services.SimulateService;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 @RequestMapping("/simulate")
 @CrossOrigin("*")
 public class SimulateController {
-
     @Autowired
     SimulateService simulateService;
 

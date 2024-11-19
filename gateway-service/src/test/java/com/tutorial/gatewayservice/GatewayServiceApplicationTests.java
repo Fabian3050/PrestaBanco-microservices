@@ -1,10 +1,10 @@
-package com.mingeso.apigateway;
+package com.tutorial.gatewayservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiGatewayApplicationTests {
+class GatewayServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

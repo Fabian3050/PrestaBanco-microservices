@@ -1,7 +1,7 @@
 package com.example.ms_simulate.services;
 
 import com.example.ms_simulate.entities.SimulateEntity;
-import com.example.ms_simulate.repositories.SimulateRepository;
+import com.example.ms_simulate.reopsitories.SimulateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

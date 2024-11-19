@@ -6,7 +6,7 @@ spring:
       enabled: true
       uri: http://localhost:8081
   datasource:
-    url: jdbc:postgresql://localhost:5432/simulatedb
+    url: jdbc:postgresql://ms-simulate:5432/simulatedb
     username: postgres
     password: 0987
   jpa:
