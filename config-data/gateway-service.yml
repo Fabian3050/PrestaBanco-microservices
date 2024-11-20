@@ -25,3 +25,7 @@ spring:
           uri: lb://ms-user
           predicates:
             - Path=/user/**
+        - id: ms-credit
+          uri: lb://ms-credit
+          predicates:
+            - Path=/credit/**

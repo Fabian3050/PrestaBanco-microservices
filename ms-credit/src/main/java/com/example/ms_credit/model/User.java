@@ -1,23 +1,17 @@
-package com.example.ms_user.entitities;
+package com.example.ms_credit.model;
 
+import com.example.ms_credit.entities.CreditEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+@AllArgsConstructor
+public class User {
     private String name;
     private String secondName;
     private String lastName;
@@ -25,4 +19,6 @@ public class UserEntity {
     private String rut;
     private int salary;
     private String address;
+
+    List<CreditEntity> credits = new ArrayList<>();
 }
