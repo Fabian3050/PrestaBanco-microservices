@@ -21,3 +21,7 @@ spring:
           uri: lb://ms-simulate
           predicates:
             - Path=/simulate/**
+        - id: ms-user
+          uri: lb://ms-user
+          predicates:
+            - Path=/user/**

@@ -10,6 +10,7 @@
         <module name="config-server" />
         <module name="ms-simulate" />
         <module name="gateway-service" />
+        <module name="ms-user" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -29,6 +30,7 @@
       <module name="gateway-server" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="ms-simulate" options="-parameters" />
+      <module name="ms-user" options="-parameters" />
     </option>
   </component>
 </project>
