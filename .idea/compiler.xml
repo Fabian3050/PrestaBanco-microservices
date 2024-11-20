@@ -8,11 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
-        <module name="ms-credit" />
         <module name="config-server" />
         <module name="ms-simulate" />
+        <module name="ms-creditEvaluation" />
         <module name="gateway-service" />
         <module name="ms-user" />
+        <module name="ms-credit" />
       </profile>
     </annotationProcessing>
   </component>
@@ -22,6 +23,7 @@
       <module name="eureka-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="ms-credit" options="-parameters" />
+      <module name="ms-creditEvaluation" options="-parameters" />
       <module name="ms-simulate" options="-parameters" />
       <module name="ms-user" options="-parameters" />
     </option>

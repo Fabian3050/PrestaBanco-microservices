@@ -11,7 +11,7 @@
 	<groupId>com.tutorial</groupId>
 	<artifactId>ms-credit</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>book-service</name>
+	<name>ms-credit</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -60,6 +60,11 @@
 			<artifactId>ms-user</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 	</dependencies>
 

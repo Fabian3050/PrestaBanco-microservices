@@ -28,7 +28,7 @@ public class CreditService {
 
     public int saveCredit(CreditEntity credit, int userId){
         RestOperations restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject("http://ms-user/user/" + userId, User.class);
+        User user = restTemplate.getForObject("http://ms-user/user/get/" + userId, User.class);
         if(user == null){
             user.getCredits().add(credit);
             credit.setUserID(userId);
@@ -53,7 +53,7 @@ public class CreditService {
 
     public List<CreditDto> getAllCreditByUserId(int userId) {
         RestOperations restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject("http://ms-user/user/" + userId, User.class);
+        User user = restTemplate.getForObject("http://ms-user/user/get/" + userId, User.class);
 
         return user.getCredits().stream()
                 .map(this::convertCreditToDTO)

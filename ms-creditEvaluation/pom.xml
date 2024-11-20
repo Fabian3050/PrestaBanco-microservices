@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.tutorial</groupId>
-	<artifactId>ms-simulate</artifactId>
+	<artifactId>ms-creditEvaluation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-simulate</name>
+	<name>ms-creditEvaluation</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
@@ -54,6 +54,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tutorial</groupId>
+			<artifactId>ms-user</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>

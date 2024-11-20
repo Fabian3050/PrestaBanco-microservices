@@ -29,3 +29,7 @@ spring:
           uri: lb://ms-credit
           predicates:
             - Path=/credit/**
+        - id: ms-creditEvaluation
+          uri: lb://ms-creditEvaluation
+          predicates:
+            - Path=/creditEvaluation/**
