@@ -12,7 +12,7 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 spring:
   application:
-    name: ms-simulate
+    name: ms-creditEvaluation
   jpa:
     hibernate:
       ddl-auto: update
