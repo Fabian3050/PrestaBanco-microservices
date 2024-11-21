@@ -23,31 +23,31 @@ public class CreditController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<List<CreditDto>> getAllCreditByUserId(@PathVariable("id") int id){
+    public ResponseEntity<List<CreditDto>> getAllCreditByUserId(@PathVariable("id") Long id){
         List<CreditDto> credits = creditService.getAllCreditByUserId(id);
         return ResponseEntity.ok(credits);
     }
 
     @GetMapping("/getTotalCost/{creditId}")
-    public int getCreditTotalCost(@PathVariable int creditId){
+    public int getCreditTotalCost(@PathVariable Long creditId){
         return creditService.getCreditTotalCost(creditId);
     }
 
     @GetMapping("/getTotalMonthly/{creditId}")
-    public int getCreditMonthlyCost(@PathVariable int creditId){
+    public int getCreditMonthlyCost(@PathVariable Long creditId){
         CreditEntity credit = creditService.getCreditById(creditId);
         int monthlyCost = getCreditTotalCost(creditId)/credit.getMaxTerm();
         return monthlyCost;
     }
 
     @GetMapping("/getById/{creditId}")
-    public ResponseEntity<CreditEntity> getCreditById(@PathVariable int creditId){
+    public ResponseEntity<CreditEntity> getCreditById(@PathVariable Long creditId){
         CreditEntity credit = creditService.getCreditById(creditId);
         return ResponseEntity.ok(credit);
     }
 
     @PostMapping("/{userId}")
-    public int saveCredit(@RequestBody CreditEntity credit, @PathVariable("userId") int userId){
+    public Long saveCredit(@RequestBody CreditEntity credit, @PathVariable("userId") Long userId){
         return creditService.saveCredit(credit,userId);
     }
 
@@ -60,13 +60,13 @@ public class CreditController {
     }
 
     @PutMapping("/status/{id}")
-    public ResponseEntity<CreditEntity> updateStatus(@PathVariable int id, @RequestBody String status) {
+    public ResponseEntity<CreditEntity> updateStatus(@PathVariable("id") Long id, @RequestBody String status) {
         CreditEntity updatedCredit = creditService.updateStatus(id, status);
         return ResponseEntity.ok(updatedCredit);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CreditEntity> deleteCredit(@PathVariable int id) throws Exception {
+    public ResponseEntity<CreditEntity> deleteCredit(@PathVariable("id") Long id) throws Exception {
         var isDeleted = creditService.deleteCredit(id);
         return ResponseEntity.noContent().build();
     }

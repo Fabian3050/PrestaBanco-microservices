@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DocumentDto {
-    private int id;
+    private Long id;
     private String typeCreditDocument;
     private String documentName;
     private String documentType;

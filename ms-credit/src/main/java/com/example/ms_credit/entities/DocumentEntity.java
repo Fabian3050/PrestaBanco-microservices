@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class DocumentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String typeCreditDocument;
 

@@ -26,32 +26,18 @@ public class CreditService {
     DocumentService documentService;
 
 
-    public int saveCredit(CreditEntity credit, int userId) {
-        // Usa RestTemplate inyectado o configurado como un bean
-        RestTemplate restTemplate = new RestTemplate();
-
-        // Obtén el usuario desde el servicio
-        User user = restTemplate.getForObject("http://ms-user/user/get/" + userId, User.class);
-
-        // Verifica si el usuario existe
-        if (user == null) {
-            throw new IllegalArgumentException("User not found with ID: " + userId);
+    public Long saveCredit(CreditEntity credit, Long userId){
+        RestOperations restTemplate = new RestTemplate();
+        User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
+        if(user != null){
+            user.getCredits().add(credit);
+            credit.setUserID(userId);
+            credit.setInterestRate((credit.getInterestRate()/12)/100);
+            return credit.getId();
+        }else{
+            throw new RuntimeException("User not found with ID: " + userId);
         }
-
-        // Verifica que el crédito no sea nulo
-        if (credit == null) {
-            throw new IllegalArgumentException("Credit entity cannot be null");
-        }
-
-        // Configura el crédito
-        credit.setUserID(userId);
-        credit.setInterestRate((credit.getInterestRate() / 12) / 100); // Valida si es la fórmula correcta
-        user.getCredits().add(credit);
-
-        // Devuelve el ID del crédito
-        return credit.getId();
     }
-
 
     public List<CreditDto> getAllCredit(){
         List<CreditEntity> credits = creditRepository.findAll();
@@ -60,21 +46,21 @@ public class CreditService {
                 .collect(Collectors.toList());
     }
 
-    public CreditEntity getCreditById(int creditId) {
+    public CreditEntity getCreditById(Long creditId) {
         return creditRepository.findById(creditId)
                 .orElseThrow(() -> new NoSuchElementException("No credit found with ID: " + creditId));
     }
 
-    public List<CreditDto> getAllCreditByUserId(int userId) {
+    public List<CreditDto> getAllCreditByUserId(Long userId) {
         RestOperations restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject("http://ms-user/user/get/" + userId, User.class);
+        User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
 
         return user.getCredits().stream()
                 .map(this::convertCreditToDTO)
                 .collect(Collectors.toList());
     }
 
-    public int getCreditTotalCost(int creditId){
+    public int getCreditTotalCost(Long creditId){
         Optional<CreditEntity> credit = creditRepository.findById(creditId);
         int requestedAmount = credit.get().getRequestedAmount();
         int maxTerm = credit.get().getMaxTerm();
@@ -95,7 +81,7 @@ public class CreditService {
         return creditRepository.save(credit);
     }
 
-    public boolean deleteCredit(int id) throws Exception{
+    public boolean deleteCredit(Long id) throws Exception{
         try{
             creditRepository.deleteById(id);
             return true;
@@ -138,7 +124,7 @@ public class CreditService {
         return dto;
     }
 
-    public CreditEntity updateStatus(int id, String status) {
+    public CreditEntity updateStatus(Long id, String status) {
         CreditEntity credit = creditRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No se encontró el crédito con ID: " + id));
 

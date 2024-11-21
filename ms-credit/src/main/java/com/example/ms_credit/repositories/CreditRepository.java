@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CreditRepository extends JpaRepository<CreditEntity,Integer> {
-    Optional<CreditEntity> findById(Integer creditId);
+public interface CreditRepository extends JpaRepository<CreditEntity,Long> {
+    Optional<CreditEntity> findById(Long creditId);
 }

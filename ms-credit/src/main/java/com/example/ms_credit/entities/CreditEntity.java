@@ -19,7 +19,7 @@ import java.util.List;
 public class CreditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
 
     private String creditType;
@@ -32,10 +32,9 @@ public class CreditEntity {
     private Date approvedRejectionDate;
     private int totalCreditCost;
 
-    private int userID;
-    private int creditEvaluationID;
+    private Long userID;
+    private Long creditEvaluationID;
 
     @OneToMany(mappedBy = "credit", cascade = CascadeType.ALL)
     private List<DocumentEntity> documents = new ArrayList<>();
-
 }

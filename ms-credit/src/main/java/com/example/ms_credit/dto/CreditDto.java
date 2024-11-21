@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreditDto {
-    private int id;
+    private Long id;
     private String creditType;
     private int maxTerm;
     private float interestRate;
@@ -22,7 +22,7 @@ public class CreditDto {
     private String status;
     private Date applicationDate;
     private Date approvedRejectionDate;
-    private int userId;
+    private Long userId;
     private List<DocumentDto> documents;
-    private int creditEvaluationId;
+    private Long creditEvaluationId;
 }

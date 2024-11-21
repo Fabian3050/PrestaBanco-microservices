@@ -25,7 +25,7 @@ public class DocumentController {
     public ResponseEntity<String> uploadDocument(
             @RequestParam("file") MultipartFile file,
             @RequestParam("doc") String doc,
-            @PathVariable("id") int id
+            @PathVariable("id") Long id
     ) throws IOException {
         System.out.println("File name: " + file.getOriginalFilename());
         System.out.println("File content type: " + file.getContentType());

@@ -26,7 +26,7 @@ public class DocumentService {
     CreditRepository creditRepository;
 
 
-    public DocumentEntity saveDocument(MultipartFile file, String typeCredit, int credit_id) throws IOException {
+    public DocumentEntity saveDocument(MultipartFile file, String typeCredit, Long credit_id) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Optional<CreditEntity> creditOptional = creditRepository.findById(credit_id);
 
