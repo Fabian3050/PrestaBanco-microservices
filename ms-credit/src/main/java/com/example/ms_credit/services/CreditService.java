@@ -33,6 +33,7 @@ public class CreditService {
             user.getCredits().add(credit);
             credit.setUserID(userId);
             credit.setInterestRate((credit.getInterestRate()/12)/100);
+            creditRepository.save(credit);
             return credit.getId();
         }else{
             throw new RuntimeException("User not found with ID: " + userId);
