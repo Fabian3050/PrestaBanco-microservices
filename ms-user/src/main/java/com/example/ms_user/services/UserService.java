@@ -18,7 +18,7 @@ public class UserService {
 
     public ArrayList<UserEntity> getUsers() {return (ArrayList<UserEntity>) userRepository.findAll();}
 
-    public UserEntity getUSerById(int id){return userRepository.findById(id).get();}
+    public UserEntity getUSerById(Long id){return userRepository.findById(id).get();}
 
     public UserEntity saveUser(UserEntity user){
         return userRepository.save(user);
@@ -28,7 +28,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean deleteUser(int id) throws Exception {
+    public boolean deleteUser(Long id) throws Exception {
         try{
             userRepository.deleteById(id);
             return true;
@@ -37,9 +37,9 @@ public class UserService {
         }
     }
 
-    public List<Credit> getUserCredits(int userId) {
+    public List<Credit> getUserCredits(Long userId) {
         RestOperations restTemplate = new RestTemplate();
-        List<Credit> credits = restTemplate.getForObject("http://ms-credit/credit/getByUser/" + userId, List.class);
+        List<Credit> credits = restTemplate.getForObject("http://localhost:8080/credit/getByUser/" + userId, List.class);
         return credits;
     }
 }

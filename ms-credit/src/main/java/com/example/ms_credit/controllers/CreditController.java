@@ -22,26 +22,26 @@ public class CreditController {
         return ResponseEntity.ok(credits);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/getAllCreditUserId/{id}")
     public ResponseEntity<List<CreditDto>> getAllCreditByUserId(@PathVariable("id") Long id){
         List<CreditDto> credits = creditService.getAllCreditByUserId(id);
         return ResponseEntity.ok(credits);
     }
 
     @GetMapping("/getTotalCost/{creditId}")
-    public int getCreditTotalCost(@PathVariable Long creditId){
+    public int getCreditTotalCost(@PathVariable("creditId") Long creditId){
         return creditService.getCreditTotalCost(creditId);
     }
 
     @GetMapping("/getTotalMonthly/{creditId}")
-    public int getCreditMonthlyCost(@PathVariable Long creditId){
+    public int getCreditMonthlyCost(@PathVariable("creditId") Long creditId){
         CreditEntity credit = creditService.getCreditById(creditId);
         int monthlyCost = getCreditTotalCost(creditId)/credit.getMaxTerm();
         return monthlyCost;
     }
 
     @GetMapping("/getById/{creditId}")
-    public ResponseEntity<CreditEntity> getCreditById(@PathVariable Long creditId){
+    public ResponseEntity<CreditEntity> getCreditById(@PathVariable("creditId") Long creditId){
         CreditEntity credit = creditService.getCreditById(creditId);
         return ResponseEntity.ok(credit);
     }

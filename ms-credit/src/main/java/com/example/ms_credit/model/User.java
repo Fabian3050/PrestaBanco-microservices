@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    private Long id;
     private String name;
     private String secondName;
     private String lastName;

@@ -23,13 +23,13 @@ public class UserController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable int id){
+    public ResponseEntity<UserEntity> getUserById(@PathVariable("id") Long id){
         UserEntity user = userService.getUSerById(id);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/getUSerCredits/{id}")
-    public ResponseEntity<List<Credit>> getUserCredits(@PathVariable int id){
+    public ResponseEntity<List<Credit>> getUserCredits(@PathVariable("id") Long id){
         List<Credit> credits = userService.getUserCredits(id);
         return ResponseEntity.ok(credits);
     }
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserEntity> deleteUser(@PathVariable int id) throws Exception {
+    public ResponseEntity<UserEntity> deleteUser(@PathVariable("id") Long id) throws Exception {
         var isDeleted = userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

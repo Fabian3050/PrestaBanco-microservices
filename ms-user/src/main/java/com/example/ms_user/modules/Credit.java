@@ -20,6 +20,6 @@ public class Credit {
     private Date approvedRejectionDate;
     private int totalCreditCost;
 
-    private int userID;
-    private int creditEvaluationID;
+    private Long userID;
+    private Long creditEvaluationID;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditEvaluation {
-    private int id;
+    private Long id;
 
     private Boolean ratioFeeIncome;
     private Boolean creditHistory;
