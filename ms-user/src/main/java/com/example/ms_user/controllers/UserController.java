@@ -1,6 +1,7 @@
 package com.example.ms_user.controllers;
 
 import com.example.ms_user.entitities.UserEntity;
+import com.example.ms_user.modules.Credit;
 import com.example.ms_user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,12 @@ public class UserController {
     public ResponseEntity<UserEntity> getUserById(@PathVariable int id){
         UserEntity user = userService.getUSerById(id);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/getUSerCredits/{id}")
+    public ResponseEntity<List<Credit>> getUserCredits(@PathVariable int id){
+        List<Credit> credits = userService.getUserCredits(id);
+        return ResponseEntity.ok(credits);
     }
 
     @PostMapping("/")
