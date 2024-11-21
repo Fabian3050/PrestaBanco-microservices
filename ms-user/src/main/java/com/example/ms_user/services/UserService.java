@@ -39,7 +39,7 @@ public class UserService {
 
     public List<Credit> getUserCredits(Long userId) {
         RestOperations restTemplate = new RestTemplate();
-        List<Credit> credits = restTemplate.getForObject("http://localhost:8080/credit/getByUser/" + userId, List.class);
+        List<Credit> credits = restTemplate.getForObject("http://localhost:8080/credit/getAllCreditUserId/" + userId, List.class);
         return credits;
     }
 }

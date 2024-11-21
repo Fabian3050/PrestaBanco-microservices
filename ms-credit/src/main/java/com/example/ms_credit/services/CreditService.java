@@ -5,10 +5,12 @@ import com.example.ms_credit.dto.DocumentDto;
 import com.example.ms_credit.entities.CreditEntity;
 import com.example.ms_credit.entities.DocumentEntity;
 import com.example.ms_credit.repositories.CreditRepository;
+import com.example.ms_user.modules.Credit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ms_credit.model.User;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,20 +25,31 @@ public class CreditService {
     @Autowired
     CreditRepository creditRepository;
     @Autowired
+    CreditService creditService;
+    @Autowired
     DocumentService documentService;
+    private final RestTemplate restTemplate = new RestTemplate();
 
 
-    public Long saveCredit(CreditEntity credit, Long userId){
-        RestOperations restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
-        if(user != null){
-            user.getCredits().add(credit);
+    public Long saveCredit(CreditEntity credit, Long userId) {
+        try {
+            // Llama al servicio del usuario
+            User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
+
+            // Si el usuario no existe, lanza una excepción
+            if (user == null) {
+                throw new RuntimeException("User not found with ID: " + userId);
+            }
+
+            // Configura el crédito y lo asocia al usuario
             credit.setUserID(userId);
-            credit.setInterestRate((credit.getInterestRate()/12)/100);
+
+            // Persistencia en la base de datos
             creditRepository.save(credit);
+
             return credit.getId();
-        }else{
-            throw new RuntimeException("User not found with ID: " + userId);
+        } catch (Exception e) {
+            throw new RuntimeException("An unexpected error occurred while saving credit", e);
         }
     }
 
@@ -53,12 +66,14 @@ public class CreditService {
     }
 
     public List<CreditDto> getAllCreditByUserId(Long userId) {
-        RestOperations restTemplate = new RestTemplate();
         User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
-
-        return user.getCredits().stream()
-                .map(this::convertCreditToDTO)
-                .collect(Collectors.toList());
+        List<CreditDto> credits = creditService.getAllCredit();
+        for(CreditDto credit : credits){
+            if(credit.getUserId() != userId){
+                credits.remove(credit);
+            }
+        }
+        return credits;
     }
 
     public int getCreditTotalCost(Long creditId){

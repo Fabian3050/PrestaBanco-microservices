@@ -20,6 +20,4 @@ public class User {
     private String rut;
     private int salary;
     private String address;
-
-    List<CreditEntity> credits = new ArrayList<>();
 }
