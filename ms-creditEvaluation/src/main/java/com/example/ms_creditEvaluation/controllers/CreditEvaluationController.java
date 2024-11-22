@@ -21,18 +21,18 @@ public class CreditEvaluationController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<CreditEvaluationEntity> getCreditEvaluation(@PathVariable("id") int id){
+    public ResponseEntity<CreditEvaluationEntity> getCreditEvaluation(@PathVariable("id") Long id){
         CreditEvaluationEntity creditEvaluation = creditEvaluationService.getCreditEvaluationById(id);
         return ResponseEntity.ok(creditEvaluation);
     }
 
     @GetMapping("/getCreditId/{creditId}")
-    public CreditEvaluationEntity getCreditEvaluationByCreditId(@PathVariable("id") int creditId){
+    public CreditEvaluationEntity getCreditEvaluationByCreditId(@PathVariable("id") Long creditId){
         return creditEvaluationService.getCreditEvaluationByCreditId(creditId);
     }
 
     @PostMapping("/{creditId}")
-    public ResponseEntity<CreditEvaluationEntity> saveCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation, @PathVariable("id") int creditId){
+    public ResponseEntity<CreditEvaluationEntity> saveCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation, @PathVariable("id") Long creditId){
         CreditEvaluationEntity newCreditEvaluation = creditEvaluationService.saveCreditEvaluation(creditEvaluation,creditId);
         return ResponseEntity.ok(newCreditEvaluation);
     }
@@ -44,7 +44,7 @@ public class CreditEvaluationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CreditEvaluationEntity> deleteUser(@PathVariable("id") int id) throws Exception {
+    public ResponseEntity<CreditEvaluationEntity> deleteUser(@PathVariable("id") Long id) throws Exception {
         var isDeleted = creditEvaluationService.deleteCreditEvaluation(id);
         return ResponseEntity.noContent().build();
     }

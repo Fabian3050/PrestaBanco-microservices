@@ -20,5 +20,5 @@ public class CreditEvaluation {
     private Boolean applicantAge;
     private Boolean savingCapacity;
 
-    private int creditId;
+    private Long creditId;
 }

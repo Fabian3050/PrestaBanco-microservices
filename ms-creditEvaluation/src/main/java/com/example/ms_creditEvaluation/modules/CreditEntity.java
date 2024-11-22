@@ -8,7 +8,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Credit {
+public class CreditEntity {
+    private Long id;
     private String creditType;
     private int maxTerm;
     private float interestRate;
@@ -19,6 +20,6 @@ public class Credit {
     private Date approvedRejectionDate;
     private int totalCreditCost;
 
-    private int userID;
-    private int creditEvaluationID;
+    private Long userId;
+    private Long creditEvaluationId;
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CreditEvaluationRepository extends JpaRepository<CreditEvaluationEntity, Integer> {
+public interface CreditEvaluationRepository extends JpaRepository<CreditEvaluationEntity, Long> {
     @Override
-    Optional<CreditEvaluationEntity> findById(Integer id);
+    Optional<CreditEvaluationEntity> findById(Long id);
 }

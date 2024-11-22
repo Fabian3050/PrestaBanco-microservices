@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class CreditEvaluationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private Boolean ratioFeeIncome;
     private Boolean creditHistory;
@@ -26,5 +26,5 @@ public class CreditEvaluationEntity {
     private Boolean maximumFinancingAmount;
     private Boolean applicantAge;
     private Boolean savingCapacity;
-    private int creditId;
+    private Long creditId;
 }
