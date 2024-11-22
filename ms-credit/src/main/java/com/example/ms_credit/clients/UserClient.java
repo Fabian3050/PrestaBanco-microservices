@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
-@FeignClient(name = "ms-user", url = "http://localhost:8080/user/")
+@FeignClient(name = "ms-user", url = "http://localhost:8080/user")
 public interface UserClient {
     @GetMapping("/getById/{id}")
-    Optional<UserEntity> findUserById(@PathVariable Long id);
+    Optional<UserEntity> findUserById(@PathVariable("id") Long id);
 }
