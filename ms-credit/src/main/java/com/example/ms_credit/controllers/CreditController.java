@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/credit")
@@ -35,15 +36,14 @@ public class CreditController {
 
     @GetMapping("/getTotalMonthly/{creditId}")
     public int getCreditMonthlyCost(@PathVariable("creditId") Long creditId){
-        CreditEntity credit = creditService.getCreditById(creditId);
-        int monthlyCost = getCreditTotalCost(creditId)/credit.getMaxTerm();
+        Optional<CreditDto> credit = creditService.getCreditById(creditId);
+        int monthlyCost = getCreditTotalCost(creditId)/credit.get().getMaxTerm();
         return monthlyCost;
     }
 
     @GetMapping("/getById/{creditId}")
-    public ResponseEntity<CreditEntity> getCreditById(@PathVariable("creditId") Long creditId){
-        CreditEntity credit = creditService.getCreditById(creditId);
-        return ResponseEntity.ok(credit);
+    public Optional<CreditDto> getCreditById(@PathVariable("creditId") Long creditId){
+        return creditService.getCreditById(creditId);
     }
 
     @PostMapping("/{userId}")

@@ -1,23 +1,18 @@
 package com.example.ms_credit.services;
 
+import com.example.ms_credit.clients.UserClient;
 import com.example.ms_credit.dto.CreditDto;
 import com.example.ms_credit.dto.DocumentDto;
 import com.example.ms_credit.entities.CreditEntity;
 import com.example.ms_credit.entities.DocumentEntity;
 import com.example.ms_credit.repositories.CreditRepository;
-import com.example.ms_user.modules.Credit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ms_credit.model.User;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,29 +23,21 @@ public class CreditService {
     CreditService creditService;
     @Autowired
     DocumentService documentService;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
+    private UserClient userClient;
+
 
 
     public Long saveCredit(CreditEntity credit, Long userId) {
-        try {
-            // Llama al servicio del usuario
-            User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
+        Optional<User> optionalUser = userClient.findUserById(userId);
 
-            // Si el usuario no existe, lanza una excepción
-            if (user == null) {
-                throw new RuntimeException("User not found with ID: " + userId);
-            }
-
-            // Configura el crédito y lo asocia al usuario
-            credit.setUserID(userId);
-
-            // Persistencia en la base de datos
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            credit.setUserID(user.getId());
             creditRepository.save(credit);
-
             return credit.getId();
-        } catch (Exception e) {
-            throw new RuntimeException("An unexpected error occurred while saving credit", e);
         }
+        return null;
     }
 
     public List<CreditDto> getAllCredit(){
@@ -60,20 +47,25 @@ public class CreditService {
                 .collect(Collectors.toList());
     }
 
-    public CreditEntity getCreditById(Long creditId) {
-        return creditRepository.findById(creditId)
-                .orElseThrow(() -> new NoSuchElementException("No credit found with ID: " + creditId));
+    public Optional<CreditDto> getCreditById(Long creditId) {
+        Optional<CreditEntity> credit = creditRepository.findById(creditId);
+        if (credit.isPresent()) {
+            Optional<CreditDto> creditDTO = Optional.of(this.convertCreditToDTO(credit.get()));
+            System.out.println(creditDTO.toString());
+            return creditDTO;
+        }
+        return Optional.empty();
     }
 
     public List<CreditDto> getAllCreditByUserId(Long userId) {
-        User user = restTemplate.getForObject("http://localhost:8080/user/get/" + userId, User.class);
-        List<CreditDto> credits = creditService.getAllCredit();
-        for(CreditDto credit : credits){
-            if(credit.getUserId() != userId){
-                credits.remove(credit);
-            }
+        Optional<List<CreditEntity>> creditList = creditRepository.findAllByUserId(userId);
+
+        if (creditList.isPresent()) {
+            return creditList.get().stream()
+                    .map(this::convertCreditToDTO)
+                    .collect(Collectors.toList());
         }
-        return credits;
+        return Collections.emptyList();
     }
 
     public int getCreditTotalCost(Long creditId){
