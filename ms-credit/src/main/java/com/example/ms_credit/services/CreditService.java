@@ -24,6 +24,7 @@ public class CreditService {
     @Autowired
     DocumentService documentService;
     private UserClient userClient;
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     public CreditService(UserClient userClient) {
@@ -31,10 +32,11 @@ public class CreditService {
     }
 
     public Long saveCredit(CreditEntity credit, Long userId) {
+        Optional<UserEntity> optionalUser = restTemplate.getForObject("http://localhost:8080/user/getById/" + userId, Optional.class);
         Optional<UserEntity> optionalUser2 = userClient.getUserById(userId);
 
-        if (optionalUser2.isPresent()) {
-            UserEntity user = optionalUser2.get();
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
             credit.setUserId(user.getId());
             creditRepository.save(credit);
             return credit.getId();

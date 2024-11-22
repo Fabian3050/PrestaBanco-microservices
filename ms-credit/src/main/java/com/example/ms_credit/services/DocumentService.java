@@ -39,8 +39,6 @@ public class DocumentService {
                     .typeCreditDocument(typeCredit)
                     .credit(credit)
                     .build();
-
-            credit.getDocuments().add(document);
             return documentRepository.save(document);
         }
 
