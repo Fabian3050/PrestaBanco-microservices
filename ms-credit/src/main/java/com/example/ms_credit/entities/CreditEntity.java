@@ -32,8 +32,8 @@ public class CreditEntity {
     private Date approvedRejectionDate;
     private int totalCreditCost;
 
-    private Long userID;
-    private Long creditEvaluationID;
+    private Long userId;
+    private Long creditEvaluationId;
 
     @OneToMany(mappedBy = "credit", cascade = CascadeType.ALL)
     private List<DocumentEntity> documents = new ArrayList<>();

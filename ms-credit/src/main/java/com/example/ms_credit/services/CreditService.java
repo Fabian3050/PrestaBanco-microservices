@@ -33,7 +33,7 @@ public class CreditService {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            credit.setUserID(user.getId());
+            credit.setUserId(user.getId());
             creditRepository.save(credit);
             return credit.getId();
         }
@@ -109,8 +109,8 @@ public class CreditService {
         creditDTO.setStatus(credit.getStatus());
         creditDTO.setApplicationDate(credit.getApplicationDate());
         creditDTO.setApprovedRejectionDate(credit.getApprovedRejectionDate());
-        creditDTO.setUserId(credit.getUserID());
-        creditDTO.setCreditEvaluationId(credit.getCreditEvaluationID());
+        creditDTO.setUserId(credit.getUserId());
+        creditDTO.setCreditEvaluationId(credit.getCreditEvaluationId());
 
         List<DocumentDto> documentDTOS = new ArrayList<>();
         if (credit.getDocuments() != null) {
