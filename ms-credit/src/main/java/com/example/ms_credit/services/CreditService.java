@@ -37,6 +37,7 @@ public class CreditService {
             UserEntity user = optionalUser2.get();
             credit.setUserId(user.getId());
             creditRepository.save(credit);
+            credit.setCreditEvaluationId(1L);
             return credit.getId();
         }
         return null;
