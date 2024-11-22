@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,5 +42,9 @@ public class UserService {
         RestOperations restTemplate = new RestTemplate();
         List<Credit> credits = restTemplate.getForObject("http://localhost:8080/credit/getAllCreditUserId/" + userId, List.class);
         return credits;
+    }
+
+    public Optional<UserEntity> findUserById(Long id){
+        return  userRepository.findById(id);
     }
 }

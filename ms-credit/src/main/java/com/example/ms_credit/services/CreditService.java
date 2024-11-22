@@ -9,7 +9,7 @@ import com.example.ms_credit.repositories.CreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ms_credit.model.User;
+import com.example.ms_credit.model.UserEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -23,16 +23,20 @@ public class CreditService {
     CreditService creditService;
     @Autowired
     DocumentService documentService;
-    private RestTemplate restTemplate = new RestTemplate();
     private UserClient userClient;
 
+    private RestTemplate restTemplate = new RestTemplate();
 
+    @Autowired
+    public CreditService(UserClient userClient) {
+        this.userClient = userClient;
+    }
 
     public Long saveCredit(CreditEntity credit, Long userId) {
-        Optional<User> optionalUser = userClient.findUserById(userId);
+        Optional<UserEntity> optionalUser2 = restTemplate.getForObject("http://localhost:8080/user/getById/" + userId, Optional.class);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        if (optionalUser2.isPresent()) {
+            UserEntity user = optionalUser2.get();
             credit.setUserId(user.getId());
             creditRepository.save(credit);
             return credit.getId();

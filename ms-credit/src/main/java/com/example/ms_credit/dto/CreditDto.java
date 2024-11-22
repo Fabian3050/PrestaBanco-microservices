@@ -1,7 +1,5 @@
 package com.example.ms_credit.dto;
 
-import com.example.ms_credit.model.CreditEvaluation;
-import com.example.ms_credit.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
