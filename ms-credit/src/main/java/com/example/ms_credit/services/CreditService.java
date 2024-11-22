@@ -32,11 +32,10 @@ public class CreditService {
     }
 
     public Long saveCredit(CreditEntity credit, Long userId) {
-        Optional<UserEntity> optionalUser = restTemplate.getForObject("http://localhost:8080/user/getById/" + userId, Optional.class);
-        Optional<UserEntity> optionalUser2 = userClient.getUserById(userId);
+        UserEntity user = restTemplate.getForObject("http://localhost:8080/user/getById/" + userId, UserEntity.class);
 
-        if (optionalUser.isPresent()) {
-            UserEntity user = optionalUser.get();
+        // Verifica si el usuario es nulo
+        if (user != null) {
             credit.setUserId(user.getId());
             creditRepository.save(credit);
             return credit.getId();
