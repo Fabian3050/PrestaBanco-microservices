@@ -31,13 +31,12 @@ public class CreditService {
     }
 
     public Long saveCredit(CreditEntity credit, Long userId) {
-        Optional<UserEntity> optionalUser2 = userClient.findUserById(userId);
+        Optional<UserEntity> optionalUser2 = userClient.getUserById(userId);
 
         if (optionalUser2.isPresent()) {
             UserEntity user = optionalUser2.get();
             credit.setUserId(user.getId());
             creditRepository.save(credit);
-            credit.setCreditEvaluationId(1L);
             return credit.getId();
         }
         return null;
@@ -114,15 +113,6 @@ public class CreditService {
         creditDTO.setApprovedRejectionDate(credit.getApprovedRejectionDate());
         creditDTO.setUserId(credit.getUserId());
         creditDTO.setCreditEvaluationId(credit.getCreditEvaluationId());
-
-        List<DocumentDto> documentDTOS = new ArrayList<>();
-        if (credit.getDocuments() != null) {
-            documentDTOS = credit.getDocuments().stream()
-                    .map(this::convertDocumentToDTO)
-                    .collect(Collectors.toList());
-        }
-        creditDTO.setDocuments(documentDTOS);
-
         return creditDTO;
     }
 

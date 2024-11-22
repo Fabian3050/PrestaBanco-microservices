@@ -34,7 +34,4 @@ public class CreditEntity {
 
     private Long userId;
     private Long creditEvaluationId;
-
-    @OneToMany(mappedBy = "credit", cascade = CascadeType.ALL)
-    private List<DocumentEntity> documents = new ArrayList<>();
 }
