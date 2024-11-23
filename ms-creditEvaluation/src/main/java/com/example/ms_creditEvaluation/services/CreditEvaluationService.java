@@ -30,7 +30,7 @@ public class CreditEvaluationService {
 
     public CreditEvaluationEntity getCreditEvaluationByCreditId(Long creditId){
         RestTemplate restTemplate = new RestTemplate();
-        CreditEntity credit = restTemplate.getForObject("http://ms-credit/credit/getById/" + creditId, CreditEntity.class);
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
         Long creditEvaluationId = credit.getCreditEvaluationId();
         CreditEvaluationEntity creditEvaluation = creditEvaluationRepository.findById(creditEvaluationId).get();
         return creditEvaluation;
