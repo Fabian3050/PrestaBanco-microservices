@@ -27,12 +27,12 @@ public class CreditEvaluationController {
     }
 
     @GetMapping("/getCreditId/{creditId}")
-    public CreditEvaluationEntity getCreditEvaluationByCreditId(@PathVariable("id") Long creditId){
+    public CreditEvaluationEntity getCreditEvaluationByCreditId(@PathVariable("creditId") Long creditId){
         return creditEvaluationService.getCreditEvaluationByCreditId(creditId);
     }
 
     @PostMapping("/{creditId}")
-    public ResponseEntity<CreditEvaluationEntity> saveCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation, @PathVariable("id") Long creditId){
+    public ResponseEntity<CreditEvaluationEntity> saveCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation, @PathVariable("creditId") Long creditId){
         CreditEvaluationEntity newCreditEvaluation = creditEvaluationService.saveCreditEvaluation(creditEvaluation,creditId);
         return ResponseEntity.ok(newCreditEvaluation);
     }
