@@ -16,7 +16,7 @@ public class CreditEvaluationService {
 
     public CreditEvaluationEntity saveCreditEvaluation(CreditEvaluationEntity creditEvaluation , Long creditId){
         RestTemplate restTemplate = new RestTemplate();
-        CreditEntity credit = restTemplate.getForObject("http://ms-credit/credit/getById/" + creditId, CreditEntity.class);
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
         credit.setCreditEvaluationId(creditEvaluation.getId());
         creditEvaluation.setCreditId(creditId);
         return creditEvaluationRepository.save(creditEvaluation);
