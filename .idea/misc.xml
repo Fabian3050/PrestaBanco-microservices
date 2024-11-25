@@ -14,6 +14,9 @@
         <option value="$PROJECT_DIR$/ms-user/pom.xml" />
         <option value="$PROJECT_DIR$/ms-credit/pom.xml" />
         <option value="$PROJECT_DIR$/ms-creditEvaluation/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-document/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-status/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-totalCost/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

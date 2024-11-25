@@ -1,12 +1,12 @@
-package com.example.ms_user.modules;
+package com.example.ms_document.models;
 
+import com.example.ms_document.entities.DocumentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

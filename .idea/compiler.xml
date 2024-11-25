@@ -9,14 +9,20 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eureka-service" />
+        <module name="ms-document" />
         <module name="config-server" />
-        <module name="ms-simulate" />
+        <module name="ms-totalCost" />
         <module name="ms-creditEvaluation" />
         <module name="gateway-service" />
         <module name="ms-user" />
         <module name="ms-credit" />
+        <module name="ms-status" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ms-simulate (1)" target="11" />
+      <module name="ms-simulate (2)" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -25,7 +31,12 @@
       <module name="gateway-service" options="-parameters" />
       <module name="ms-credit" options="-parameters" />
       <module name="ms-creditEvaluation" options="-parameters" />
+      <module name="ms-document" options="-parameters" />
       <module name="ms-simulate" options="-parameters" />
+      <module name="ms-simulate (1)" options="-parameters" />
+      <module name="ms-simulate (2)" options="-parameters" />
+      <module name="ms-status" options="-parameters" />
+      <module name="ms-totalCost" options="-parameters" />
       <module name="ms-user" options="-parameters" />
     </option>
   </component>
