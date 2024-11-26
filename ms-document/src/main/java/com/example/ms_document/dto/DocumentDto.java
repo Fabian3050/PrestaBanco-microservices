@@ -16,4 +16,5 @@ public class DocumentDto {
     private String typeCreditDocument;
     private String documentName;
     private String documentType;
+    private Long creditId;
 }

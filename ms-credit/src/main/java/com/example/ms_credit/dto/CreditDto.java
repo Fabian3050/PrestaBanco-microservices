@@ -20,7 +20,7 @@ public class CreditDto {
     private String status;
     private Date applicationDate;
     private Date approvedRejectionDate;
+    private Long documentId;
     private Long userId;
-    private List<DocumentDto> documents;
     private Long creditEvaluationId;
 }
