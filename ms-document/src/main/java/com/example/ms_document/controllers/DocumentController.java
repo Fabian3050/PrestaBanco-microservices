@@ -49,4 +49,10 @@ public class DocumentController {
         List<DocumentDto> documentDTOs = documentService.getAllDocuments();
         return ResponseEntity.ok(documentDTOs);
     }
+
+    @GetMapping("/getByCreditId/{creditId}")
+    public ResponseEntity<List<DocumentDto>> getDocumentsByCreditId(@PathVariable("creditId") Long creditId){
+        List<DocumentDto> documentDTOs = documentService.getAllDocumentsByCreditId(creditId);
+        return ResponseEntity.ok(documentDTOs);
+    }
 }

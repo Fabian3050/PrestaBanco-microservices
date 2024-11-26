@@ -2,6 +2,7 @@ package com.example.ms_credit.controllers;
 
 import com.example.ms_credit.dto.CreditDto;
 import com.example.ms_credit.entities.CreditEntity;
+import com.example.ms_credit.model.DocumentEntity;
 import com.example.ms_credit.services.CreditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,11 @@ public class CreditController {
     @GetMapping("/getById/{creditId}")
     public Optional<CreditDto> getCreditById(@PathVariable("creditId") Long creditId){
         return creditService.getCreditById(creditId);
+    }
+
+    @GetMapping("/getDocumentsByCreditId/{creditId}")
+    public List<DocumentEntity> getDocumentsByCreditId(@PathVariable("creditId") Long creditId){
+        return creditService.getDocumentByCreditId(creditId);
     }
 
     @PostMapping("/{userId}")

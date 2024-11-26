@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface CreditRepository extends JpaRepository<CreditEntity,Long> {
     Optional<CreditEntity> findById(Long creditId);
     Optional<List<CreditEntity>> findAllByUserId(Long userId);
+
+    Optional<List<CreditEntity>> findAllById(Long creditId);
 }

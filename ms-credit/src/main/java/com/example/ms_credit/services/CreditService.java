@@ -2,9 +2,8 @@ package com.example.ms_credit.services;
 
 import com.example.ms_credit.clients.UserClient;
 import com.example.ms_credit.dto.CreditDto;
-import com.example.ms_credit.dto.DocumentDto;
 import com.example.ms_credit.entities.CreditEntity;
-import com.example.ms_credit.entities.DocumentEntity;
+import com.example.ms_credit.model.DocumentEntity;
 import com.example.ms_credit.repositories.CreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,6 @@ public class CreditService {
     CreditRepository creditRepository;
     @Autowired
     CreditService creditService;
-    @Autowired
-    DocumentService documentService;
     private UserClient userClient;
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -117,20 +114,20 @@ public class CreditService {
         return creditDTO;
     }
 
-    public DocumentDto convertDocumentToDTO(DocumentEntity document) {
-        DocumentDto dto = new DocumentDto();
-        dto.setId(document.getId());
-        dto.setDocumentName(document.getDocumentName());
-        dto.setDocumentType(document.getDocumentType());
-        dto.setTypeCreditDocument(document.getTypeCreditDocument());
-        return dto;
-    }
-
     public CreditEntity updateStatus(Long id, String status) {
         CreditEntity credit = creditRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No se encontró el crédito con ID: " + id));
 
         credit.setStatus(status);
         return creditRepository.save(credit);
+    }
+
+    public List<DocumentEntity> getDocumentByCreditId(Long creditId) {
+        Optional<List<CreditEntity>> credits = creditRepository.findAllById(creditId);
+        if (credits.isPresent()) {
+            DocumentEntity documents = restTemplate.getForObject("http://localhost:8080/document/getByCreditId/" + creditId, DocumentEntity.class);
+            return (List<DocumentEntity>) documents;
+        }
+        return null;
     }
 }

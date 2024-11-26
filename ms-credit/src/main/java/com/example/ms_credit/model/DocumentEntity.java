@@ -1,17 +1,13 @@
-package com.example.ms_credit.dto;
+package com.example.ms_credit.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Basic;
-import javax.persistence.Lob;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DocumentDto {
+public class DocumentEntity {
     private Long id;
     private String typeCreditDocument;
     private String documentName;
