@@ -32,10 +32,7 @@ public class SimulateService {
         double totalPriceHome = simulate.getTotalPriceHome();
         String creditType = simulate.getCreditType();
 
-        // Validate that the values are valid
-        if (monthlyRate == 0 || paymentPeriod == 0) {
-            throw new IllegalArgumentException("Interest rate and number of payments must be greater than zero.");
-        }
+        
 
         if (creditType.equals("firstHome")) {
             totalPriceHome = totalPriceHome * 0.8;
