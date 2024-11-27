@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,8 +23,6 @@ import javax.transaction.Transactional;
 public class DocumentService {
     @Autowired
     DocumentRepository documentRepository;
-
-
     private RestTemplate restTemplate = new RestTemplate();
 
 
@@ -70,12 +69,10 @@ public class DocumentService {
 
     public List<DocumentDto> getAllDocumentsByCreditId(Long creditId) {
         Optional<List<DocumentEntity>> documents = documentRepository.findAllByCreditId(creditId);
-        if (documents.isPresent()) {
-            return documents.get().stream()
-                    .map(this::convertDocumentToDTO)
-                    .collect(Collectors.toList());
-        }
-        throw new RuntimeException("No documents found with credit ID: " + creditId);
+
+        return documents.get().stream()
+                .map(this::convertDocumentToDTO)
+                .collect(Collectors.toList());
     }
 
     public DocumentDto convertDocumentToDTO(DocumentEntity document) {
