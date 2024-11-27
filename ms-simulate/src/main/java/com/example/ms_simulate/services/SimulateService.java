@@ -32,7 +32,7 @@ public class SimulateService {
         double totalPriceHome = simulate.getTotalPriceHome();
         String creditType = simulate.getCreditType();
 
-        
+
 
         if (creditType.equals("firstHome")) {
             totalPriceHome = totalPriceHome * 0.8;
@@ -43,6 +43,7 @@ public class SimulateService {
         }else if (creditType.equals("remodeling")) {
             totalPriceHome = totalPriceHome * 0.5;
         }
+
 
         // Calculate the common power
         double power = Math.pow(1 + monthlyRate, paymentPeriod);
