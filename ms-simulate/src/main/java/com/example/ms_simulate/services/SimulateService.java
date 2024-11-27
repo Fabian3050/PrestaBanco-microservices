@@ -31,7 +31,11 @@ public class SimulateService {
         int paymentPeriod = simulate.getPaymentPeriod();   // Number of payments (months)
         double totalPriceHome = simulate.getTotalPriceHome();
         String creditType = simulate.getCreditType();
-        
+
+        // Validate that the values are valid
+        if (monthlyRate == 0 || paymentPeriod == 0) {
+            throw new IllegalArgumentException("Interest rate and number of payments must be greater than zero.");
+        }
 
         if (creditType.equals("firstHome")) {
             totalPriceHome = totalPriceHome * 0.8;
@@ -55,11 +59,10 @@ public class SimulateService {
     public SimulateEntity getSimulateCredit(Long id){
         SimulateEntity simulate = getSimulateById(id);
         float monthlyFee = this.calculateMonthlyPayment(simulate);
+        simulate.setMonthlyFee((int) Math.round(monthlyFee));
         if (monthlyFee < simulate.getMonthlyClientIncome()) {
-            simulate.setMonthlyFee((int) Math.round(monthlyFee));
             simulate.setMessage("Esta en el rango, el cliente puede pagar las cuotas mensuales según sun sueldo ingresado");
         }else{
-            simulate.setMonthlyFee((int) Math.round(monthlyFee));
             simulate.setMessage("No esta en el rango, el cliente no puede pagar las cuotas mensuales según su sueldo ingresado");
         }
         return  simulate;
