@@ -42,3 +42,7 @@ spring:
           uri: lb://ms-creditEvaluation
           predicates:
             - Path=/creditEvaluation/**
+        - id: ms-document
+          uri: lb://ms-document
+          predicates:
+            - Path=/document/**
