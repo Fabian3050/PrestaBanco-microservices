@@ -1,15 +1,15 @@
 import httpClient from "../http-common";
 
 const getFile = id => {
-    return httpClient.get(`/api/v1/document/${id}`);
+    return httpClient.get(`/document/${id}`);
 }
 
 const create = id => {
-    return httpClient.post(`/api/v1/document/${id}`);
+    return httpClient.post(`/document/${id}`);
 }
 
 const getAll = () => {
-    return httpClient.get(`/api/v1/simulate/all`);
+    return httpClient.get(`/simulate/all`);
 }
 
 export default { getAll, create, getFile };
