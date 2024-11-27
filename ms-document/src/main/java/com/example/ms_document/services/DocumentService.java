@@ -28,24 +28,28 @@ public class DocumentService {
 
 
     public DocumentEntity saveDocument(MultipartFile file, String typeCredit, Long credit_id) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        Credit credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + credit_id, Credit.class);
-
-        if (credit != null) {
-            DocumentEntity document = new DocumentEntity();
-            document.setDocumentName(fileName);
-            document.setDocumentType(file.getContentType());
-            document.setData(file.getBytes());
-            document.setTypeCreditDocument(typeCredit);
-            document.setCreditId(credit_id);
-            return documentRepository.save(document);
-        }
-
+        // Verificar que el archivo es un PDF antes de hacer cualquier otra cosa
         if (!file.getContentType().equals("application/pdf")) {
             throw new IllegalArgumentException("Solo se pueden subir archivos en formato pdf");
         }
 
-        throw new RuntimeException("Credit not found with id: " + credit_id);
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        Credit credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + credit_id, Credit.class);
+
+        // Si el crédito no se encuentra, lanzar una excepción
+        if (credit == null) {
+            throw new RuntimeException("Credit not found with id: " + credit_id);
+        }
+
+        // Crear el documento y guardarlo si todo está en orden
+        DocumentEntity document = new DocumentEntity();
+        document.setDocumentName(fileName);
+        document.setDocumentType(file.getContentType());
+        document.setData(file.getBytes());
+        document.setTypeCreditDocument(typeCredit);
+        document.setCreditId(credit_id);
+
+        return documentRepository.save(document);
     }
 
     @Transactional
