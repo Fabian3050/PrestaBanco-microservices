@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/credit")
-@CrossOrigin("*")
 public class CreditController {
     @Autowired
     CreditService creditService;

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/creditEvaluation")
-@CrossOrigin("*")
 public class CreditEvaluationController {
     @Autowired
     CreditEvaluationService creditEvaluationService;

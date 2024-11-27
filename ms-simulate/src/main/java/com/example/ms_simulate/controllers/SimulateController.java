@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/simulate")
-@CrossOrigin("*")
 public class SimulateController {
     @Autowired
     SimulateService simulateService;
