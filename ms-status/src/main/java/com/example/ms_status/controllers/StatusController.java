@@ -22,7 +22,7 @@ public class StatusController {
         return ResponseEntity.ok(newStatus);
     }
 
-    @GetMapping("/{creditId}")
+    @GetMapping("/byCreditId/{creditId}")
     public ResponseEntity<Optional<StatusEntity>> getStatusByCreditId(@PathVariable("creditId") Long creditId){
         Optional<StatusEntity> status = statusService.getStatusByCreditId(creditId);
         return ResponseEntity.ok(status);
