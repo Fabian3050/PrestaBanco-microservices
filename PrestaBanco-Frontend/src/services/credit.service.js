@@ -26,7 +26,7 @@ const getTotalMonthly = (data) => {
 }
 
 const getCreditById = (id) => {
-    return httpClient.get(`/api/v1/credit/getById/${id}`);
+    return httpClient.get(`/credit/getById/${id}`);
 }
 
 const updateStatus = (creditId, status) => {
