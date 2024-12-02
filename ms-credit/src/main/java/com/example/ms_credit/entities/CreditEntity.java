@@ -27,6 +27,7 @@ public class CreditEntity {
     private float interestRate;
     private int requestedAmount;
     private int approvedAmount;
+    private int totalPriceHome;
     private String status;
     private Date applicationDate = new Date() ;
     private Date approvedRejectionDate;

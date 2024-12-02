@@ -31,7 +31,8 @@ const CreditListByUser = () => {
     const fetchUserRut = async () => {
       try {
         const response = await userService.getCreditByUserId(userId);
-        setUserRut(response.data.rut);
+        const response1 = await userService.getById(userId);
+        setUserRut(response1.data.rut);
       } catch (error) {
         console.error("Error al obtener los datos del usuario:", error);
       }
@@ -96,7 +97,7 @@ const CreditListByUser = () => {
         <TableBody>
           {credits.map((credit) => (
             <TableRow key={credit.id}>
-              <TableCell align="left">{userRut || "N/A"}</TableCell>
+              <TableCell align="left">{credit || "N/A"}</TableCell>
               <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
               <TableCell align="left">{totalCosts[credit.id] || "N/A"}</TableCell>
               <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
