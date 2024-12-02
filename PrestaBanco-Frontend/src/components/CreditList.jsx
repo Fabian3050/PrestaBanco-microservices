@@ -21,7 +21,7 @@ const CreditListByUser = () => {
   useEffect(() => {
     const fetchCredits = async () => {
       try {
-        const response = await creditService.getById(userId);
+        const response = await creditService.getCreditByUserId(userId);
         setCredits(response.data);
       } catch (error) {
         console.error("Error al obtener las solicitudes de crédito:", error);
@@ -30,7 +30,7 @@ const CreditListByUser = () => {
 
     const fetchUserRut = async () => {
       try {
-        const response = await userService.getById(userId);
+        const response = await userService.getCreditByUserId(userId);
         setUserRut(response.data.rut);
       } catch (error) {
         console.error("Error al obtener los datos del usuario:", error);

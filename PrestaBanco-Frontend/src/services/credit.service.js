@@ -25,6 +25,10 @@ const getTotalMonthly = (data) => {
     return httpClient.get(`/credit/getTotalMonthly`, data);
 }
 
+const getCreditByUserId = (id) => {
+    return httpClient.get(`/credit/getAllCreditUserId/${id}`);
+}
+
 const getCreditById = (id) => {
     return httpClient.get(`/credit/getById/${id}`);
 }
@@ -41,5 +45,5 @@ const getUserRut = data => {
     return httpClient.get(`/credit/getUserId`, data);
 }
 
-export default { getAll, create, get, getById, remove , getUserRut, getTotalCost, getTotalMonthly, updateStatus , getCreditById};
+export default { getAll, create, get, getById, remove , getUserRut, getTotalCost, getTotalMonthly, updateStatus , getCreditById, getCreditByUserId};
 

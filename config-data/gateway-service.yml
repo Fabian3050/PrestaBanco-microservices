@@ -46,7 +46,11 @@ spring:
           uri: lb://ms-document
           predicates:
             - Path=/document/**
-        - id: ms-document
+        - id: ms-status
           uri: lb://ms-status
           predicates:
             - Path=/status/**
+        - id: ms-totalCost
+          uri: lb://ms-totalCost
+          predicates:
+            - Path=/totalCost/**
