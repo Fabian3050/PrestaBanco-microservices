@@ -36,6 +36,7 @@ public class TotalCreditService {
 
     public TotalCreditEntity saveTotalCredit(TotalCreditEntity totalCreditEntity, Long creditId){
         CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
+        System.out.print(credit);
         int totalCost = getCreditTotalCost(totalCreditEntity, creditId);
         credit.setTotalCreditCost(totalCost);
         totalCreditEntity.setTotalCost(totalCost);
