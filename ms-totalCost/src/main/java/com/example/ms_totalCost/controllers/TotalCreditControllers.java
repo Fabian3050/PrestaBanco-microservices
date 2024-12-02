@@ -18,9 +18,9 @@ public class TotalCreditControllers {
         return ResponseEntity.ok(newTotalCredit);
     }
 
-    @GetMapping("/getById/{creditId}")
-    public TotalCreditEntity getTotalCredit(@PathVariable("creditId") Long creditId){
-        return totalCreditService.getTotalCreditById(creditId);
+    @GetMapping("/getById/{id}")
+    public TotalCreditEntity getTotalCredit(@PathVariable("id") Long id){
+        return totalCreditService.getTotalCreditById(id);
     }
 
     @DeleteMapping("/{creditId}")
