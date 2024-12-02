@@ -26,13 +26,16 @@ public class SimulateService {
 
     public float calculateMonthlyPayment(SimulateEntity simulate) {
         // Extract variables from the simulate object
-        float principal = simulate.getLoanAmount();  // Loan amount
-        float monthlyRate = simulate.getInterestRate()/12/100; // Monthly interest rate
-        int paymentPeriod = simulate.getPaymentPeriod();   // Number of payments (months)
+        float principal = simulate.getP();  // Loan amount
+        float monthlyRate = simulate.getR()/12/100; // Monthly interest rate
+        int paymentPeriod = simulate.getN();   // Number of payments (months)
         double totalPriceHome = simulate.getTotalPriceHome();
         String creditType = simulate.getCreditType();
 
-
+        // Validate that the values are valid
+        if (monthlyRate == 0 || paymentPeriod == 0) {
+            throw new IllegalArgumentException("Interest rate and number of payments must be greater than zero.");
+        }
 
         if (creditType.equals("firstHome")) {
             totalPriceHome = totalPriceHome * 0.8;
@@ -43,7 +46,6 @@ public class SimulateService {
         }else if (creditType.equals("remodeling")) {
             totalPriceHome = totalPriceHome * 0.5;
         }
-
 
         // Calculate the common power
         double power = Math.pow(1 + monthlyRate, paymentPeriod);
@@ -57,10 +59,11 @@ public class SimulateService {
     public SimulateEntity getSimulateCredit(Long id){
         SimulateEntity simulate = getSimulateById(id);
         float monthlyFee = this.calculateMonthlyPayment(simulate);
-        simulate.setMonthlyFee((int) Math.round(monthlyFee));
         if (monthlyFee < simulate.getMonthlyClientIncome()) {
+            simulate.setM((int) Math.round(monthlyFee));
             simulate.setMessage("Esta en el rango, el cliente puede pagar las cuotas mensuales según sun sueldo ingresado");
         }else{
+            simulate.setM((int) Math.round(monthlyFee));
             simulate.setMessage("No esta en el rango, el cliente no puede pagar las cuotas mensuales según su sueldo ingresado");
         }
         return  simulate;
@@ -68,13 +71,13 @@ public class SimulateService {
 
     public SimulateEntity calculateMonthlyPaymentAllCost(Long simulateId){
         SimulateEntity simulate = getSimulateById(simulateId);
-        double desgravamen = simulate.getLoanAmount() * 0.0003;
-        double administration = simulate.getLoanAmount() * 0.01;
+        double desgravamen = simulate.getP() * 0.0003;
+        double administration = simulate.getP() * 0.01;
 
-        float totaMonthlyPay = (float) (simulate.getMonthlyFee() + desgravamen + administration);
+        float totaMonthlyPay = (float) (simulate.getM() + desgravamen + administration);
         simulate.setTotalMonthlyPay((int)Math.round(totaMonthlyPay));
 
-        float totalCreditCost = (totaMonthlyPay * simulate.getPaymentPeriod() + simulate.getLoanAmount());
+        float totalCreditCost = (totaMonthlyPay * simulate.getN() + simulate.getP());
         simulate.setTotalCreditCost((int)Math.round(totalCreditCost));
         return simulate;
     }
