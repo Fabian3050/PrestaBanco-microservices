@@ -11,11 +11,13 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import creditService from "../services/credit.service";
 import userService from "../services/user.service";
+import statusService from "../services/status.service";
 
 const CreditListByUser = () => {
   const { userId } = useParams();
   const [credits, setCredits] = useState([]);
   const [userRut, setUserRut] = useState("");
+  const [estadoSolicitud , setEstadoSolicitud] = useState("");
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -35,7 +37,6 @@ const CreditListByUser = () => {
         console.error("Error al obtener los datos del usuario:", error);
       }
     };
-
     fetchCredits();
     fetchUserRut();
   }, [userId]);
@@ -75,6 +76,17 @@ const CreditListByUser = () => {
     }
   };
 
+  const getStatus = async (creditId) => {
+    try {
+      const response = await statusService.getByCreditId(creditId);
+      setEstadoSolicitud(response.data.status);
+    } catch (error) {
+      console.error("Error al obtener el estado de la solicitud:", error);
+      return null;
+    }
+  };
+
+
   return (
     <TableContainer component={Paper} className="mt-5">
       <h2 className="text-center">Solicitudes de Crédito del Usuario</h2>
@@ -93,6 +105,7 @@ const CreditListByUser = () => {
         </TableHead>
         <TableBody>
           {credits.map((credit) => (
+            getStatus(credit.id),
             <TableRow key={credit.id}>
               <TableCell align="left">{userRut || "N/A"}</TableCell>
               <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
@@ -100,7 +113,7 @@ const CreditListByUser = () => {
               <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
               <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
               <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell align="left">{credit.status || "Sin seguimiento"}</TableCell>
+              <TableCell align="left">{estadoSolicitud || "Sin seguimiento"}</TableCell>
               <TableCell>
                 <Button
                   variant="contained"

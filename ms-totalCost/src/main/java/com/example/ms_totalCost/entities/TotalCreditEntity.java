@@ -17,7 +17,12 @@ public class TotalCreditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private int totalCost;
+    float creditLifeInsurance;
+    int fireInsurance;
+    float commission;
+
     private Long userId;
     private Long creditId;
 }

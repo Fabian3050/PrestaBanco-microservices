@@ -34,25 +34,16 @@ const ModifyStatus = () => {
     setStatus(event.target.value);
   };
 
-  const handleSave = async () => {
+  const handleSubmit = async (isNewStatus) => {
     try {
-      await statusService.create(statusData,creditId);
+      const serviceMethod = isNewStatus ? statusService.create : statusService.update;
+      await serviceMethod(statusData, creditId);
       console.log("Estado actualizado correctamente");
       navigate(`/executive`);
     } catch (error) {
       console.error("Error al actualizar el estado:", error);
     }
   };
-
-  const handleUpdate = async () => {
-    try {
-      await statusService.update(statusData,creditId);
-      console.log("Estado actualizado correctamente");
-      navigate(`/executive`);
-    } catch (error) {
-      console.error("Error al actualizar el estado:", error);
-    }
-  }
 
 
   return (
@@ -69,11 +60,19 @@ const ModifyStatus = () => {
         </Select>
       </FormControl>
 
-      <Button variant="contained" color="primary" onClick={handleSave} className="mt-3" style={{ marginTop: "8px" }}>
-      Crear estado de solicitud
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleSubmit(true)}
+      >
+        Crear estado de solicitud
       </Button>
-      <Button variant="contained" color="primary" onClick={handleUpdate} className="mt-3" style={{ marginTop: "8px" }}>
-      modificar estado de solicitud
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleSubmit(false)}
+      >
+      Modificar estado de solicitud
       </Button>
     </div>
   );
