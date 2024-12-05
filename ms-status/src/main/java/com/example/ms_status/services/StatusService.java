@@ -29,9 +29,14 @@ public class StatusService {
     }
 
     public Optional<StatusEntity> getStatusByCreditId(Long creditId){
-        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
-        StatusEntity status = statusRepository.findById(credit.getStatusId()).get();
-        return Optional.of(status);
+        StatusEntity stat = null;
+        List<StatusEntity> status = statusRepository.findAll();
+        for (StatusEntity s : status){
+            if (s.getCreditId().equals(creditId)){
+                stat = s;
+            }
+        }
+        return Optional.of(stat);
     }
 
     public List<StatusEntity> getAllStatus(){
