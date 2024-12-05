@@ -17,11 +17,11 @@ const getAll = () => {
 }
 
 const update = data => {
-    return httpClient.put('/user/', data);
+    return httpClient.put('/status/', data);
 }
 
 const remove = id => {
-    return httpClient.delete(`/user/${id}`);
+    return httpClient.delete(`/status/${id}`);
 }
 
 export default { getById, create, getByCreditId, getAll, update, remove };

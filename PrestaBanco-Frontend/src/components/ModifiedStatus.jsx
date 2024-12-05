@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import creditService from "../services/credit.service";
 import { Button, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import statusService from "../services/status.service";
 
 
 const ModifyStatus = () => {
@@ -9,6 +10,10 @@ const ModifyStatus = () => {
   const navigate = useNavigate();
   const [credit, setCredit] = useState(null);
   const [status, setStatus] = useState("");
+
+  const statusData = {
+    status: status
+  }
 
   useEffect(() => {
 
@@ -31,13 +36,23 @@ const ModifyStatus = () => {
 
   const handleSave = async () => {
     try {
-      await creditService.updateStatus(creditId, status);
+      await statusService.create(statusData,creditId);
       console.log("Estado actualizado correctamente");
-      navigate("/executive"); // Redirige a la lista después de guardar
+      navigate(`/executive`);
     } catch (error) {
       console.error("Error al actualizar el estado:", error);
     }
   };
+
+  const handleUpdate = async () => {
+    try {
+      await statusService.update(statusData);
+      console.log("Estado actualizado correctamente");
+      navigate(`/executive`);
+    } catch (error) {
+      console.error("Error al actualizar el estado:", error);
+    }
+  }
 
 
   return (
@@ -54,8 +69,11 @@ const ModifyStatus = () => {
         </Select>
       </FormControl>
 
-      <Button variant="contained" color="primary" onClick={handleSave} className="mt-3">
-        Guardar cambios
+      <Button variant="contained" color="primary" onClick={handleSave} className="mt-3" style={{ marginTop: "8px" }}>
+      Crear estado de solicitud
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleUpdate} className="mt-3" style={{ marginTop: "8px" }}>
+      modificar estado de solicitud
       </Button>
     </div>
   );

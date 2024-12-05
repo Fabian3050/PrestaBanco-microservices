@@ -33,6 +33,8 @@ public class CreditService {
 
         // Verifica si el usuario es nulo
         if (user != null) {
+            Date date = new Date();
+            credit.setApplicationDate(date);
             credit.setUserId(user.getId());
             creditRepository.save(credit);
             return credit.getId();

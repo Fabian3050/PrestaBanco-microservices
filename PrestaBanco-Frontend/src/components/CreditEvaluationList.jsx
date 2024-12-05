@@ -10,11 +10,14 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import creditService from "../services/credit.service";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import statusService from "../services/status.service";
+import userService from "../services/user.service";
 
 const CreditEvaluationList = () => {
   const [credits, setCredits] = useState([]); // Cambiado a un array vacío
-  const [userRuts, setUserRuts] = useState({}); // Estado para almacenar los RUTs de los usuarios asociados a sus IDs
   const navigate = useNavigate();
+  const [userRut, setUserRut] = useState("");
+  const [estado , setEstado] = useState("");
 
   const init = async () => {
     try {
@@ -37,6 +40,27 @@ const CreditEvaluationList = () => {
     navigate(`/executive/status/${id}`);
   };
 
+  const getStatus = async (creditId) => {
+    try {
+      const response = await statusService.getByCreditId(creditId);
+      setEstado(response.data.status);
+    } catch (error) {
+      console.error("Error al obtener el estado de la solicitud:", error);
+      return null;
+    }
+  };
+
+  const fetchUserRut = async (userId) => {
+    try {
+      const response1 = await userService.getById(userId);
+      setUserRut(response1.data.rut);
+    } catch (error) {
+      console.error("Error al obtener los datos del usuario:", error);
+    }
+  };
+
+
+
   return (
     <TableContainer component={Paper} className="mt-5">
       <h2 className="text-center">Solicitudes de Crédito del Sistema</h2>
@@ -55,39 +79,45 @@ const CreditEvaluationList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {credits.map((credit) => (
-            <TableRow key={credit.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-              <TableCell align="left">{credit.user?.rut || "N/A"}</TableCell>
-              <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
-              <TableCell align="left">{credit.totalCost || "N/A"}</TableCell>
-              <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
-              <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
-              <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
-              <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell align="left">{credit.status || "N/A"}</TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={handleEvaluate}
-                  startIcon={<ArrowForwardIosIcon />}
-                >
-                  Evaluar Credito
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() => modifiedStatus(credit.id)}
-                  startIcon={<ArrowForwardIosIcon />}
-                  style={{ marginTop: "8px" }} // Agregar un espacio entre los botones
-                >
-                  Modificar estado solicitud
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+        {credits.map((credit) => {
+            fetchUserRut(credit.userId); // Llamamos a la función para obtener el RUT del usuario
+            getStatus(credit.id);
+            return (
+              <TableRow key={credit.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell align="left">
+                  {userRut || "N/A"}
+                </TableCell>
+                <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
+                <TableCell align="left">{credit.totalCost || "N/A"}</TableCell>
+                <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
+                <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
+                <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
+                <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
+                <TableCell align="left">{estado || "N/A"}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={handleEvaluate}
+                    startIcon={<ArrowForwardIosIcon />}
+                  >
+                    Evaluar Credito
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => modifiedStatus(credit.id)}
+                    startIcon={<ArrowForwardIosIcon />}
+                    style={{ marginTop: "8px" }}
+                  >
+                    Modificar estado solicitud
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+  })}
         </TableBody>
       </Table>
       <Link to="/" className="btn btn-primary mt-3">

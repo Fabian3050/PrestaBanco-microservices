@@ -16,7 +16,6 @@ const CreditListByUser = () => {
   const { userId } = useParams();
   const [credits, setCredits] = useState([]);
   const [userRut, setUserRut] = useState("");
-  const [totalCosts, setTotalCosts] = useState({});
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -30,7 +29,6 @@ const CreditListByUser = () => {
 
     const fetchUserRut = async () => {
       try {
-        const response = await userService.getCreditByUserId(userId);
         const response1 = await userService.getById(userId);
         setUserRut(response1.data.rut);
       } catch (error) {
@@ -85,8 +83,7 @@ const CreditListByUser = () => {
           <TableRow>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Rut Cliente</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Monto Solicitado</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Costo Total Credito</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Tasa de Interés</TableCell>
+            <TableCell align="left" sx={{ fontWeight: "bold" }}>Tasa de Interés Anual</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Período de Pago (meses)</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Tipo de Crédito</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Fecha Creación Crédito</TableCell>
@@ -97,14 +94,23 @@ const CreditListByUser = () => {
         <TableBody>
           {credits.map((credit) => (
             <TableRow key={credit.id}>
-              <TableCell align="left">{credit || "N/A"}</TableCell>
+              <TableCell align="left">{userRut || "N/A"}</TableCell>
               <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
-              <TableCell align="left">{totalCosts[credit.id] || "N/A"}</TableCell>
               <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
               <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
               <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
               <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell align="left">{credit.status || "N/A"}</TableCell>
+              <TableCell> <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={() => deleteCredit(credit.id)}
+                  style={{ marginLeft: "0.2rem" }}
+                  startIcon={<DeleteIcon />}
+                >
+                  Ver estado de la solicitud
+                </Button>
+                </TableCell>
               <TableCell>
                 <Button
                   variant="contained"
