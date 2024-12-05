@@ -16,8 +16,8 @@ const getAll = () => {
     return httpClient.get('/status/get');
 }
 
-const update = data => {
-    return httpClient.put('/status/', data);
+const update = (data,creditId) => {
+    return httpClient.put(`/status/${creditId}`, data);
 }
 
 const remove = id => {

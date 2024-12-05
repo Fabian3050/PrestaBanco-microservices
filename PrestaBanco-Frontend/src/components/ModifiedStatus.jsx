@@ -46,7 +46,7 @@ const ModifyStatus = () => {
 
   const handleUpdate = async () => {
     try {
-      await statusService.update(statusData);
+      await statusService.update(statusData,creditId);
       console.log("Estado actualizado correctamente");
       navigate(`/executive`);
     } catch (error) {

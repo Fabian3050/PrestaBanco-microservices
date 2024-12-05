@@ -19,7 +19,7 @@ public class StatusService {
 
     public StatusEntity saveStatus(StatusEntity status, Long creditId){
         CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
-        credit.setStatus(status.getStatus());
+        credit.setStatusId(status.getId());
         status.setCreditId(creditId);
         return statusRepository.save(status);
     }
@@ -29,7 +29,9 @@ public class StatusService {
     }
 
     public Optional<StatusEntity> getStatusByCreditId(Long creditId){
-        return statusRepository.findByCreditId(creditId);
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
+        StatusEntity status = statusRepository.findById(credit.getStatusId()).get();
+        return Optional.of(status);
     }
 
     public List<StatusEntity> getAllStatus(){

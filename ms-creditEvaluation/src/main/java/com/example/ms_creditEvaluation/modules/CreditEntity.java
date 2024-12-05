@@ -22,4 +22,5 @@ public class CreditEntity {
 
     private Long userId;
     private Long creditEvaluationId;
+    private Long statusId;
 }

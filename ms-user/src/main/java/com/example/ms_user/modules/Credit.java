@@ -24,4 +24,5 @@ public class Credit {
     private Long documentId;
     private Long userId;
     private Long creditEvaluationId;
+    private Long statusId;
 }
