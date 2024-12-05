@@ -12,7 +12,7 @@ const ModifyStatus = () => {
   const [status, setStatus] = useState("");
 
   const statusData = {
-    status: status
+    status : status
   }
 
   useEffect(() => {

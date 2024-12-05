@@ -100,17 +100,7 @@ const CreditListByUser = () => {
               <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
               <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
               <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell> <Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={() => deleteCredit(credit.id)}
-                  style={{ marginLeft: "0.2rem" }}
-                  startIcon={<DeleteIcon />}
-                >
-                  Ver estado de la solicitud
-                </Button>
-                </TableCell>
+              <TableCell align="left">{credit.status || "Sin seguimiento"}</TableCell>
               <TableCell>
                 <Button
                   variant="contained"

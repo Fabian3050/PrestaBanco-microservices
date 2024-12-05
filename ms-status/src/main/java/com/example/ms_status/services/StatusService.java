@@ -36,8 +36,10 @@ public class StatusService {
         return statusRepository.findAll();
     }
 
-    public StatusEntity updateStatus(StatusEntity status){
-        return statusRepository.save(status);
+    public StatusEntity updateStatus(StatusEntity status, Long creditId){
+        StatusEntity newStatus = statusRepository.findByCreditId(creditId).get();
+        newStatus.setStatus(status.getStatus());
+        return statusRepository.save(newStatus);
     }
 
     public boolean deleteStatus(Long id) throws Exception{

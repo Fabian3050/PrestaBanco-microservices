@@ -17,7 +17,7 @@ const CreditEvaluationList = () => {
   const [credits, setCredits] = useState([]); // Cambiado a un array vacío
   const navigate = useNavigate();
   const [userRut, setUserRut] = useState("");
-  const [estado , setEstado] = useState("");
+  const [estadoSolicitud , setEstadoSolicitud] = useState("");
 
   const init = async () => {
     try {
@@ -43,7 +43,7 @@ const CreditEvaluationList = () => {
   const getStatus = async (creditId) => {
     try {
       const response = await statusService.getByCreditId(creditId);
-      setEstado(response.data.status);
+      setEstadoSolicitud(response.data.status);
     } catch (error) {
       console.error("Error al obtener el estado de la solicitud:", error);
       return null;
@@ -93,7 +93,7 @@ const CreditEvaluationList = () => {
                 <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
                 <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
                 <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-                <TableCell align="left">{estado || "N/A"}</TableCell>
+                <TableCell align="left">{estadoSolicitud || "Sin seguimiento"}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"

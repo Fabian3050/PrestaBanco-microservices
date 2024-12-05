@@ -39,9 +39,9 @@ public class StatusController {
         return ResponseEntity.ok(status);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<StatusEntity> updateStatus(@RequestBody StatusEntity status){
-        StatusEntity updatedStatus = statusService.updateStatus(status);
+    @PutMapping("/{creditId}")
+    public ResponseEntity<StatusEntity> updateStatus(@RequestBody StatusEntity status, @PathVariable("creditId") Long creditId){
+        StatusEntity updatedStatus = statusService.updateStatus(status,creditId);
         return  ResponseEntity.ok(updatedStatus);
     }
 
