@@ -23,6 +23,12 @@ public class TotalCreditControllers {
         return totalCreditService.getTotalCreditById(id);
     }
 
+    @GetMapping("/getByCreditId/{creditId}")
+    public ResponseEntity<TotalCreditEntity> getTotalCreditByCreditId(@PathVariable("creditId") Long creditId){
+        var totalCredit = totalCreditService.getTotalCreditByCreditId(creditId);
+        return ResponseEntity.ok(totalCredit.get());
+    }
+
     @DeleteMapping("/{creditId}")
     public ResponseEntity<TotalCreditEntity> deleteTotalCredit(@PathVariable("creditId") Long creditId) throws Exception {
         var isDeleted = totalCreditService.deleteTotalCredit(creditId);

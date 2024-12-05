@@ -57,7 +57,9 @@ public class TotalCreditService {
     }
 
     public Optional<TotalCreditEntity> getTotalCreditByCreditId(Long creditId){
-        return totalCreditRepository.findByCreditId(creditId);
+        return totalCreditRepository.findAll().stream()
+                .filter(s -> s.getCreditId() != null && s.getCreditId().equals(creditId))
+                .findFirst();
     }
 
     public boolean deleteTotalCredit(Long id) throws Exception{
