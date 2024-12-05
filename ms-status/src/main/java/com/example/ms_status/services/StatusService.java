@@ -28,16 +28,12 @@ public class StatusService {
         return statusRepository.findById(id).get();
     }
 
-    public Optional<StatusEntity> getStatusByCreditId(Long creditId){
-        StatusEntity stat = null;
-        List<StatusEntity> status = statusRepository.findAll();
-        for (StatusEntity s : status){
-            if (s.getCreditId().equals(creditId)){
-                stat = s;
-            }
-        }
-        return Optional.of(stat);
+    public Optional<StatusEntity> getStatusByCreditId(Long creditId) {
+        return statusRepository.findAll().stream()
+                .filter(s -> s.getCreditId() != null && s.getCreditId().equals(creditId))
+                .findFirst();
     }
+
 
     public List<StatusEntity> getAllStatus(){
         return statusRepository.findAll();
