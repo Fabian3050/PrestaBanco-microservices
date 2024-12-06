@@ -20,16 +20,14 @@ public class TotalCreditService {
         CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
 
         int requestedAmount = credit.getRequestedAmount();
-        int maxTerm = credit.getMaxTerm();
-        float interestRate = credit.getTotalCreditCost();
         totalCreditEntity.setCreditLifeInsurance( (float)(requestedAmount * 0.0003));
         totalCreditEntity.setFireInsurance(20000);
         totalCreditEntity.setCommission((float) (requestedAmount * 0.001));
 
 
-        double power = Math.pow(1 + interestRate, maxTerm);
-        float monthlyPayment = (float) (requestedAmount * (interestRate * power) / (power - 1)) + totalCreditEntity.getCreditLifeInsurance() + totalCreditEntity.getFireInsurance();
-        int totalCost = Math.round(monthlyPayment * maxTerm + totalCreditEntity.getCommission());
+        double power = Math.pow(1 + credit.getInterestRate(), credit.getMaxTerm());
+        float monthlyPayment = (float) (credit.getRequestedAmount() * (credit.getInterestRate() * power) / (power - 1)) + totalCreditEntity.getCreditLifeInsurance() + totalCreditEntity.getFireInsurance();
+        int totalCost = (int) (monthlyPayment * credit.getMaxTerm() + totalCreditEntity.getCommission());
 
         return totalCost;
     }
