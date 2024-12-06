@@ -25,8 +25,8 @@ public class TotalCreditService {
         totalCreditEntity.setCommission((float) (requestedAmount * 0.001));
 
 
-        double power = Math.pow(1 + credit.getInterestRate(), credit.getMaxTerm());
-        float monthlyPayment = (float) (credit.getRequestedAmount() * (credit.getInterestRate() * power) / (power - 1)) + totalCreditEntity.getCreditLifeInsurance() + totalCreditEntity.getFireInsurance();
+        double power = Math.pow(1 + (credit.getInterestRate()/12/100), credit.getMaxTerm());
+        float monthlyPayment = (float) (credit.getRequestedAmount() * ((credit.getInterestRate()/12/100 ) * power) / (power - 1)) + totalCreditEntity.getCreditLifeInsurance() + totalCreditEntity.getFireInsurance();
         int totalCost = (int) (monthlyPayment * credit.getMaxTerm() + totalCreditEntity.getCommission());
 
         return totalCost;
