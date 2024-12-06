@@ -20,9 +20,9 @@ public class TotalCreditService {
         CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
 
         int requestedAmount = credit.getRequestedAmount();
-        totalCreditEntity.setCreditLifeInsurance( (float)(requestedAmount * 0.0003));
+        totalCreditEntity.setCreditLifeInsurance((int) (requestedAmount * 0.0003));
         totalCreditEntity.setFireInsurance(20000);
-        totalCreditEntity.setCommission((float) (requestedAmount * 0.001));
+        totalCreditEntity.setCommission((int) (requestedAmount * 0.001));
 
 
         double power = Math.pow(1 + (credit.getInterestRate()/12/100), credit.getMaxTerm());

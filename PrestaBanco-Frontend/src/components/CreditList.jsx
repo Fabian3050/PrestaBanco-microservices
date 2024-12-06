@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link , useNavigate} from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,12 +12,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import creditService from "../services/credit.service";
 import userService from "../services/user.service";
 import statusService from "../services/status.service";
+import totalCostService from "../services/totalCost.service";
 
 const CreditListByUser = () => {
   const { userId } = useParams();
   const [credits, setCredits] = useState([]);
   const [userRut, setUserRut] = useState("");
   const [estadoSolicitud , setEstadoSolicitud] = useState("");
+  const [costoTotal, setCostoTotal] = useState("");
+  const [creditLifeInsurance, setCreditLifeInsurance] = useState("");
+  const [fireInsurance, setFireInsurance] = useState("");
+  const [comission, setComission] = useState("");
+
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -47,10 +55,8 @@ const CreditListByUser = () => {
         const costs = {};
         for (let credit of credits) {
           const costResponse = await creditService.getTotalCost(credit.id);
-          const formattedDate = format(new Date(credit.applicationDate), 'dd/MM/yyyy HH:mm');
           costs[credit.id] = costResponse.data; // Asigna el costo total a cada crédito
         }
-        setTotalCosts(costs);
       } catch (error) {
         console.error("Error al obtener los costos totales:", error);
       }
@@ -76,6 +82,23 @@ const CreditListByUser = () => {
     }
   };
 
+  const calcularCostosTotales = async (creditId) => {
+    const totalCostData = {
+      totalCost: costoTotal, // Asegúrate de que 'costoTotal' esté definido y actualizado
+      creditLifeInsurance: creditLifeInsurance, // Asegúrate de definir estas variables
+      fireInsurance: fireInsurance,
+      comission: comission
+    };
+  
+    try {
+      const response = await totalCostService.create(totalCostData, creditId);
+      setCostoTotal(response.data.totalCost);
+      navigate('/totalCostCredit/' + response.data.id + '/' + userId);
+    } catch (error) {
+      console.error("Error al obtener el costo total:", error);
+      return null;
+    }
+  };
   const getStatus = async (creditId) => {
     try {
       const response = await statusService.getByCreditId(creditId);
@@ -115,16 +138,28 @@ const CreditListByUser = () => {
               <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
               <TableCell align="left">{estadoSolicitud || "Sin seguimiento"}</TableCell>
               <TableCell>
+
                 <Button
                   variant="contained"
                   color="error"
-                  size="small"
+                  size="small mt-1"
                   onClick={() => deleteCredit(credit.id)}
                   style={{ marginLeft: "0.5rem" }}
                   startIcon={<DeleteIcon />}
                 >
                   Eliminar
                 </Button>
+
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small mt-1"
+                  onClick={() => calcularCostosTotales(credit.id)}
+                  style={{ marginLeft: "0.5rem" }}
+                >
+                  Calcular costos totales
+                </Button>
+
               </TableCell>
             </TableRow>
           ))}

@@ -12,6 +12,7 @@ import CreditList from './components/CreditList'
 import CreditEvaluationList from './components/CreditEvaluationList'
 import AddCreditEvaluation from './components/AddCreditEvaluation'
 import ModifyStatus from './components/ModifiedStatus'
+import TotalcostResult from './components/TotalCostResult'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,7 @@ function App() {
             <Route path="/executive" element = {<CreditEvaluationList />} />
             <Route path="/executive/creditEvaluation" element = {<AddCreditEvaluation />} />
             <Route path="/executive/status/:creditId" element = {<ModifyStatus />} />
+            <Route path="/totalCostCredit/:totalCostId/:userId" element = {<TotalcostResult />} />
             </Routes>
       </div>
     </BrowserRouter>

@@ -19,9 +19,9 @@ public class TotalCreditEntity {
     private Long id;
 
     private int totalCost;
-    private float creditLifeInsurance;
+    private int creditLifeInsurance;
     private int fireInsurance;
-    private float commission;
+    private int commission;
 
     private Long userId;
     private Long creditId;
