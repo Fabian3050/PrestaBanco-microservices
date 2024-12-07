@@ -13,7 +13,7 @@ spec:
         app: ms-creditevaluation-deployment
     spec:
       containers:
-        - name: ms-creditEvaluation-container
+        - name: ms-creditevaluation-container
           image: fabian3050/ms-creditevaluation:latest
           ports:
             - containerPort: 8081
