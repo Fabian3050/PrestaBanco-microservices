@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-creditEvaluation-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-creditEvaluation-deployment
+  template:
+    metadata:
+      labels:
+        app: ms-creditEvaluation-deployment
+    spec:
+      containers:
+        - name: ms-creditEvaluation-container
+          image: fabian3050/ms-creditEvaluation:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://localhost:8081
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://localhost:8761
+            - name: eureka.instance.preferIpAddress
+              value: "true"
+            - name: POSTGRES_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: POSTGRES_DB_HOST
+            - name: POSTGRES_DB_FINANCIAL_EVALUATION
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config-map
+                  key: POSTGRES_DB_FINANCIAL_EVALUATION
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_PASSWORD

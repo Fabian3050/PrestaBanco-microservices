@@ -13,11 +13,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import userService from "../services/user.service.js";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import TextField from '@mui/material/TextField';
 
 const RegisterList = () => {
   const [users, setUsers] = useState([]);
 
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const init = () => {
     userService
@@ -72,8 +74,19 @@ const RegisterList = () => {
     navigate(`/user/${userId}/credits`);
   };
 
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <TableContainer component={Paper}>
+      <TextField
+        label="Buscar por RUT o Nombre"
+        variant="outlined"
+        onChange={handleSearch}
+        fullWidth
+        style={{ marginBottom: '20px' }}
+      />
       <br />
       <Link
         to="/user/add"

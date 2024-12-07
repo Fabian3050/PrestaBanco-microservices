@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config-map
+  labels:
+    app: postgres-config-map
+data:
+  POSTGRES_DB_HOST: postgres
+  POSTGRES_DB_USER: userdb
+  POSTGRES_DB_FINANCIAL_EVALUATION: creditEvaluationdb
+  POSTGRES_DB_CREDIT: creditdb
+  POSTGRES_DB_DOCUMENT: documentdb
+  POSTGRES_DB_SIMULATE: simulatedb
+  POSTGRES_DB_STATUS: statusdb
+  POSTGRES_DB_TOTALCOST: totalCreditdb

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service-deployment
+  labels:
+    app: gateway-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: gateway-service-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway-service-deployment
+    spec:
+      containers:
+        - name: gateway-service
+          image: mellow03/gateway-service:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://localhost:8081
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://localhost:8761
+            - name: eureka.instance.preferIpAddress
+              value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  labels:
+    app: gateway-service
+spec:
+  selector:
+    app: gateway-service-deployment
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

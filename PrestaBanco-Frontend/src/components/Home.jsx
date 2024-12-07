@@ -5,7 +5,7 @@ import './Home.css';  // Para agregar estilos
 const Home = () => {
     return (
         <div className="home-container">
-            <h1>Presta Banco</h1>
+            <h1 className="title">Presta Banco</h1>
             <div className="button-container">
                 <Link to="/simulate/add">
                     <button className="menu-button">Simulación de crédito</button>

@@ -12,22 +12,26 @@ import creditService from "../services/credit.service";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import statusService from "../services/status.service";
 import userService from "../services/user.service";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const CreditEvaluationList = () => {
-  const [credits, setCredits] = useState([]); // Cambiado a un array vacío
+  const [credits, setCredits] = useState([]);
+  const [userRuts, setUserRuts] = useState({}); // Mantener los RUTs de los usuarios por id
+  const [estadoSolicitud, setEstadoSolicitud] = useState({}); // Mantener el estado de solicitud por id de crédito
+
+  const [userRut, setUserRut] = useState(""); // RUT del usuario actual
   const navigate = useNavigate();
-  const [userRut, setUserRut] = useState("");
-  const [estadoSolicitud , setEstadoSolicitud] = useState("");
 
   const init = async () => {
     try {
       const creditResponse = await creditService.getAll();
       setCredits(creditResponse.data);
     } catch (error) {
-      console.error("Error al obtener las solicitudes de crédito o usuarios:", error);
+      console.error("Error al obtener las solicitudes de crédito:", error);
     }
   };
 
+  // Fetching datos asincrónicamente para cada crédito y usuario
   useEffect(() => {
     init();
   }, []);
@@ -40,26 +44,77 @@ const CreditEvaluationList = () => {
     navigate(`/executive/status/${id}`);
   };
 
-  const getStatus = async (creditId) => {
-    try {
-      const response = await statusService.getByCreditId(creditId);
-      setEstadoSolicitud(response.data.status);
-    } catch (error) {
-      console.error("Error al obtener el estado de la solicitud:", error);
-      return null;
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      const statuses = {};
+      for (let credit of credits) {
+        try {
+          const statusResponse = await statusService.getByCreditId(credit.id);
+          statuses[credit.id] = statusResponse.data.status;
+        } catch (error) {
+          console.error("Error al obtener el estado de la solicitud:", error);
+        }
+      }
+      setEstadoSolicitud(statuses);
+    };
+
+    if (credits.length > 0) {
+      fetchStatuses();
     }
-  };
+  }, [credits]);
+
+
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      const statuses = {};
+      const users = {};
+      for (let credit of credits) {
+        try {
+          const statusResponse = await statusService.getByCreditId(credit.id);
+          const userResponse = await userService.getById(credit.userId);
+          statuses[credit.id] = statusResponse.data.status;
+          users[credit.userId] = userResponse.data.rut;
+        } catch (error) {
+          console.error("Error al obtener el estado de la solicitud:", error);
+        }
+      }
+      setUserRuts(users);
+      setEstadoSolicitud(statuses);
+    };
+
+    if (credits.length > 0) {
+      fetchStatuses();
+    }
+  }, [credits]);
 
   const fetchUserRut = async (userId) => {
     try {
       const response1 = await userService.getById(userId);
-      setUserRut(response1.data.rut);
+      if (response1.data && response1.data.rut) {
+        setUserRuts(response1.data.rut);
+      } else {
+        console.error("No se encontró el RUT del usuario.");
+      }
     } catch (error) {
       console.error("Error al obtener los datos del usuario:", error);
     }
   };
 
-
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm("¿Está seguro que desea borrar esta solicitud de crédito?");
+    if (confirmDelete) {
+      creditService
+        .remove(id)
+        .then((response) => {
+          console.log("La solicitud de crédito ha sido eliminada.", response.data);
+          setCredits((prevCredits) => prevCredits.filter((credit) => credit.id !== id));
+        })
+        .catch((error) => {
+          console.log("Se ha producido un error al intentar eliminar la solicitud de crédito", error);
+        });
+    }
+  }
 
   return (
     <TableContainer component={Paper} className="mt-5">
@@ -79,13 +134,11 @@ const CreditEvaluationList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-        {credits.map((credit) => {
-            fetchUserRut(credit.userId); // Llamamos a la función para obtener el RUT del usuario
-            getStatus(credit.id);
+          {credits.map((credit) => {
             return (
               <TableRow key={credit.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left">
-                  {userRut || "N/A"}
+                  {userRuts[credit.userId] || "N/A"} {/* Mostrar el RUT correspondiente */}
                 </TableCell>
                 <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
                 <TableCell align="left">{credit.totalCost || "N/A"}</TableCell>
@@ -93,7 +146,7 @@ const CreditEvaluationList = () => {
                 <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
                 <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
                 <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-                <TableCell align="left">{estadoSolicitud || "Sin seguimiento"}</TableCell>
+                <TableCell align="left">{estadoSolicitud[credit.id] || "Sin seguimiento"}</TableCell> {/* Mostrar el estado correspondiente */}
                 <TableCell>
                   <Button
                     variant="contained"
@@ -114,10 +167,20 @@ const CreditEvaluationList = () => {
                   >
                     Modificar estado solicitud
                   </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={() => handleDelete(credit.id)}
+                  startIcon={<DeleteIcon />}
+                  style={{ marginTop: "8px" }}
+                >
+                  Eliminar Credito
+                </Button>
                 </TableCell>
               </TableRow>
             );
-  })}
+          })}
         </TableBody>
       </Table>
       <Link to="/" className="btn btn-primary mt-3">

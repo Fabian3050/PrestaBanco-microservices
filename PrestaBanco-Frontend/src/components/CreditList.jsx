@@ -18,12 +18,11 @@ const CreditListByUser = () => {
   const { userId } = useParams();
   const [credits, setCredits] = useState([]);
   const [userRut, setUserRut] = useState("");
-  const [estadoSolicitud , setEstadoSolicitud] = useState("");
-  const [costoTotal, setCostoTotal] = useState("");
-  const [creditLifeInsurance, setCreditLifeInsurance] = useState("");
-  const [fireInsurance, setFireInsurance] = useState("");
-  const [comission, setComission] = useState("");
-
+  const [estadoSolicitudes, setEstadoSolicitudes] = useState({});
+  const [costoTotal, setCostoTotal] = useState(0);
+  const [creditLifeInsurance, setCreditLifeInsurance] = useState(0);
+  const [fireInsurance, setFireInsurance] = useState(0);
+  const [comission, setComission] = useState(0);
 
   const navigate = useNavigate();
 
@@ -50,20 +49,21 @@ const CreditListByUser = () => {
   }, [userId]);
 
   useEffect(() => {
-    const fetchTotalCosts = async () => {
-      try {
-        const costs = {};
-        for (let credit of credits) {
-          const costResponse = await creditService.getTotalCost(credit.id);
-          costs[credit.id] = costResponse.data; // Asigna el costo total a cada crédito
+    const fetchStatuses = async () => {
+      const statuses = {};
+      for (let credit of credits) {
+        try {
+          const statusResponse = await statusService.getByCreditId(credit.id);
+          statuses[credit.id] = statusResponse.data.status;
+        } catch (error) {
+          console.error("Error al obtener el estado de la solicitud:", error);
         }
-      } catch (error) {
-        console.error("Error al obtener los costos totales:", error);
       }
+      setEstadoSolicitudes(statuses);
     };
 
     if (credits.length > 0) {
-      fetchTotalCosts();
+      fetchStatuses();
     }
   }, [credits]);
 
@@ -74,7 +74,7 @@ const CreditListByUser = () => {
         .remove(id)
         .then((response) => {
           console.log("La solicitud de crédito ha sido eliminada.", response.data);
-          setCredits(credits.filter((credit) => credit.id !== id));
+          setCredits(prevCredits => prevCredits.filter((credit) => credit.id !== id));
         })
         .catch((error) => {
           console.log("Se ha producido un error al intentar eliminar la solicitud de crédito", error);
@@ -85,11 +85,11 @@ const CreditListByUser = () => {
   const calcularCostosTotales = async (creditId) => {
     const totalCostData = {
       totalCost: costoTotal, // Asegúrate de que 'costoTotal' esté definido y actualizado
-      creditLifeInsurance: creditLifeInsurance, // Asegúrate de definir estas variables
+      creditLifeInsurance: creditLifeInsurance,
       fireInsurance: fireInsurance,
       comission: comission
     };
-  
+
     try {
       const response = await totalCostService.create(totalCostData, creditId);
       setCostoTotal(response.data.totalCost);
@@ -99,16 +99,6 @@ const CreditListByUser = () => {
       return null;
     }
   };
-  const getStatus = async (creditId) => {
-    try {
-      const response = await statusService.getByCreditId(creditId);
-      setEstadoSolicitud(response.data.status);
-    } catch (error) {
-      console.error("Error al obtener el estado de la solicitud:", error);
-      return null;
-    }
-  };
-
 
   return (
     <TableContainer component={Paper} className="mt-5">
@@ -128,7 +118,6 @@ const CreditListByUser = () => {
         </TableHead>
         <TableBody>
           {credits.map((credit) => (
-            getStatus(credit.id),
             <TableRow key={credit.id}>
               <TableCell align="left">{userRut || "N/A"}</TableCell>
               <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
@@ -136,9 +125,8 @@ const CreditListByUser = () => {
               <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
               <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
               <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell align="left">{estadoSolicitud || "Sin seguimiento"}</TableCell>
+              <TableCell align="left">{estadoSolicitudes[credit.id] || "Sin seguimiento"}</TableCell>
               <TableCell>
-
                 <Button
                   variant="contained"
                   color="error"
@@ -159,7 +147,6 @@ const CreditListByUser = () => {
                 >
                   Calcular costos totales
                 </Button>
-
               </TableCell>
             </TableRow>
           ))}
