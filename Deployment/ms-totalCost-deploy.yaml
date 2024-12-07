@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ms-totalCost-container
-          image: fabian3050/ms-totalCost:latest
+          image: fabian3050/ms-totalcost:latest
           ports:
             - containerPort: 8081
           env:

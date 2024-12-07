@@ -19,7 +19,7 @@ spec:
             - containerPort: 8081
           env:
             - name: SPRING_CLOUD_CONFIG_URI
-              value: http://backend-config:8081
+              value: http://localhost:8081
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: http://localhost:8761
             - name: eureka.instance.preferIpAddress
