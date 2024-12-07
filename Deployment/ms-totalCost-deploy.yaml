@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-totalCost-deployment
+  name: ms-totalcost-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ms-totalCost-deployment
+      app: ms-totalcost-deployment
   template:
     metadata:
       labels:
-        app: ms-totalCost-deployment
+        app: ms-totalcost-deployment
     spec:
       containers:
-        - name: ms-totalCost-container
+        - name: ms-totalcost-container
           image: fabian3050/ms-totalcost:latest
           ports:
             - containerPort: 8081

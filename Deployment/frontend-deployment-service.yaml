@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: mellow03/frontend:latest
+          image: fabian3050/frontend:latest
           ports:
             - containerPort: 5173
 ---

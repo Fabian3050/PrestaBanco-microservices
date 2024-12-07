@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ms-creditEvaluation-deployment
+  name: ms-creditevaluation-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ms-creditEvaluation-deployment
+      app: ms-creditevaluation-deployment
   template:
     metadata:
       labels:
-        app: ms-creditEvaluation-deployment
+        app: ms-creditevaluation-deployment
     spec:
       containers:
         - name: ms-creditEvaluation-container
