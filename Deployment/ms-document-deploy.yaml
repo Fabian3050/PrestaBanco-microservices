@@ -16,7 +16,7 @@ spec:
         - name: ms-document-container
           image: fabian3050/ms-document:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://localhost:8081
