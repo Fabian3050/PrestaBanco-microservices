@@ -18,7 +18,7 @@ public class StatusService {
     private RestTemplate restTemplate = new RestTemplate();
 
     public StatusEntity saveStatus(StatusEntity status, Long creditId){
-        CreditEntity credit = restTemplate.getForObject("http://127.0.0.1:8080/credit/getById/" + creditId, CreditEntity.class);
+        CreditEntity credit = restTemplate.getForObject("http://ms-credit/credit/getById/" + creditId, CreditEntity.class);
         credit.setStatusId(status.getId());
         status.setCreditId(creditId);
         return statusRepository.save(status);
