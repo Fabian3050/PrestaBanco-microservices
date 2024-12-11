@@ -5,7 +5,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-service:8761/eureka
   instance:
     prefer-ip-address: true
     hostname: eureka-service
@@ -17,7 +17,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/documentdb
+    url: jdbc:postgresql://postgres:5432/documentdb
     username: postgres
     password: 0987
   sql:
