@@ -29,7 +29,7 @@ public class CreditService {
     }
 
     public Long saveCredit(CreditEntity credit, Long userId) {
-        UserEntity user = restTemplate.getForObject("http://ms-user/user/getById/" + userId, UserEntity.class);
+        UserEntity user = restTemplate.getForObject("http://127.0.0.1:8080/user/getById/" + userId, UserEntity.class);
 
         // Verifica si el usuario es nulo
         if (user != null) {
@@ -127,7 +127,7 @@ public class CreditService {
     public List<DocumentEntity> getDocumentByCreditId(Long creditId) {
         Optional<List<CreditEntity>> credits = creditRepository.findAllById(creditId);
         if (credits.isPresent()) {
-            DocumentEntity documents = restTemplate.getForObject("http://ms-document/document/getByCreditId/" + creditId, DocumentEntity.class);
+            DocumentEntity documents = restTemplate.getForObject("http://127.0.0.1:8080/document/getByCreditId/" + creditId, DocumentEntity.class);
             return (List<DocumentEntity>) documents;
         }
         return null;
