@@ -33,7 +33,7 @@ public class DocumentService {
         }
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        Credit credit = restTemplate.getForObject("http://MS-CREDIT/credit/getById/" + credit_id, Credit.class);
+        Credit credit = restTemplate.getForObject("http://gateway-service:8080/credit/getById/" + credit_id, Credit.class);
 
         // Si el crédito no se encuentra, lanzar una excepción
         if (credit == null) {
