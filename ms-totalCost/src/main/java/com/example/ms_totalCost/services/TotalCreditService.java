@@ -17,7 +17,7 @@ public class TotalCreditService {
     private RestTemplate restTemplate = new RestTemplate();
 
     public int getCreditTotalCost(TotalCreditEntity totalCreditEntity, Long creditId){
-        CreditEntity credit = restTemplate.getForObject("http://gateway-service:8080/credit/getById/" + creditId, CreditEntity.class);
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
 
         int requestedAmount = credit.getRequestedAmount();
         totalCreditEntity.setCreditLifeInsurance((int) (requestedAmount * 0.0003));
@@ -33,7 +33,7 @@ public class TotalCreditService {
     }
 
     public TotalCreditEntity saveTotalCredit(TotalCreditEntity totalCreditEntity, Long creditId){
-        CreditEntity credit = restTemplate.getForObject("http://gateway-service:8080/credit/getById/" + creditId, CreditEntity.class);
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
         System.out.print(credit);
         int totalCost = getCreditTotalCost(totalCreditEntity, creditId);
         credit.setTotalCreditCost(totalCost);
