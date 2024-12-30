@@ -112,7 +112,7 @@ const RegisterList = () => {
               <TableCell align="left" sx={{ fontWeight: "bold" }}>Segundo Apellido</TableCell>
               <TableCell align="left" sx={{ fontWeight: "bold" }}>Sueldo</TableCell>
               <TableCell align="left" sx={{ fontWeight: "bold" }}>Dirección</TableCell>
-              <TableCell align="left" sx={{ fontWeight: "bold" }}>Acciones</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -128,13 +128,47 @@ const RegisterList = () => {
                 <TableCell align="left">{user.secondLastName}</TableCell>
                 <TableCell align="left">{user.salary}</TableCell>
                 <TableCell align="left">{user.address}</TableCell>
-                <TableCell>
-                  <ButtonGroup variant="contained" size="small">
-                    <Button color="info" onClick={() => handleEdit(user.id)} startIcon={<EditIcon />}>Editar</Button>
-                    <Button color="error" onClick={() => handleDelete(user.id)} startIcon={<DeleteIcon />}>Eliminar</Button>
-                    <Button color="success" onClick={() => handleRequestCredit(user.id)} startIcon={<ArrowForwardIosIcon />}>Solicitar Crédito</Button>
-                    <Button color="success" onClick={() => handleViewCredits(user.id)} startIcon={<ArrowForwardIosIcon />}>Solicitudes realizadas</Button>
-                  </ButtonGroup>
+                <TableCell align="center" style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    size="small"
+                    onClick={() => handleEdit(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<EditIcon />}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    size="medium"
+                    onClick={() => handleDelete(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<DeleteIcon />}
+                  >
+                    Eliminar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="medium"
+                    onClick={() => handleRequestCredit(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<ArrowForwardIosIcon />}
+                  >
+                    Solicitar Crédito
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick={() => handleViewCredits(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<ArrowForwardIosIcon />}
+                  >
+                    Solicitudes realizadas
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

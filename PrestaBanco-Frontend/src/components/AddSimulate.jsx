@@ -11,7 +11,6 @@ const CreditSimulation = () => {
   const [monthlyClientIncome, setMonthlyClientIncome] = useState("");
   const [creditType, setCreditType] = useState("");
   const [simulationId, setSimulationId] = useState("");
-  
 
   // Estado para almacenar los resultados de la simulación
   const [simulationResult, setSimulationResult] = useState(null);
@@ -19,7 +18,7 @@ const CreditSimulation = () => {
   // Función para guardar la simulación en la base de datos
   const handleSaveSimulation = async (e) => {
     e.preventDefault();
-  
+
     // Datos a enviar en la simulación
     const simulationData = {
       m: 0,
@@ -30,7 +29,7 @@ const CreditSimulation = () => {
       monthlyClientIncome,
       creditType
     };
-  
+
     try {
       // Guarda la simulación utilizando el servicio
       const response = await simulateService.create(simulationData);
@@ -46,12 +45,12 @@ const CreditSimulation = () => {
   // Función para realizar la simulación y obtener el resultado
   const handlePerformSimulation = async (e) => {
     e.preventDefault();
-  
+
     if (!simulationId) {
       alert("Primero debes guardar una simulación.");
       return;
     }
-  
+
     try {
       // Realiza la simulación utilizando solo el ID de la simulación guardada
       const response = await simulateService.simulate(simulationId);
@@ -63,13 +62,14 @@ const CreditSimulation = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row">
+    <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
+      <header style={{ textAlign: "center", marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "2rem", color: "#0d47a1", marginBottom: "10px" }}>Simulación de Crédito</h1>
+      </header>
+      <div style={{ display: "flex", gap: "20px" }}>
         {/* Columna para el formulario */}
-        <div className="col-md-6">
-          <h2>Simulación de Crédito</h2>
-          <form className="p-4 border rounded shadow-sm bg-light">
-
+        <div style={{ flex: 1, backgroundColor: "#ffffff", padding: "20px", borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+          <form>
             <div className="mb-3">
               <label htmlFor="loanAmount" className="form-label">Monto del Préstamo:</label>
               <input
@@ -149,26 +149,24 @@ const CreditSimulation = () => {
             </div>
 
             {/* Botones de acción */}
-            <button onClick={handleSaveSimulation} className="btn btn-primary w-100 mb-3">Guardar Datos</button>
-            <button onClick={handlePerformSimulation} className="btn btn-primary w-100">Realizar Simulación</button>
+            <button onClick={handleSaveSimulation} className="btn btn-primary w-100 mb-3" style={{ borderRadius: "8px", height: "40px" }}>Guardar Datos</button>
+            <button onClick={handlePerformSimulation} className="btn btn-primary w-100" style={{ borderRadius: "8px", height: "40px" }}>Realizar Simulación</button>
           </form>
         </div>
 
         {/* Columna para los resultados */}
-        <div className="col-md-6">
-          <h2>Resultados de la Simulación</h2>
+        <div style={{ flex: 1, backgroundColor: "#ffffff", padding: "20px", borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+          <h2 style={{ fontSize: "1.5rem", color: "#0d47a1", marginBottom: "10px" }}>Resultados de la Simulación</h2>
           {simulationResult ? (
-            <div className="p-4 border rounded shadow-sm bg-light">
+            <div>
               <p><strong>Pago Mensual:</strong> {simulationResult.m}</p>
               <p><strong>Mensaje:</strong> {simulationResult.message}</p>
             </div>
           ) : (
-            <div className="p-4 border rounded shadow-sm bg-light">
-              <p>Introduce los datos y realiza la simulación para ver los resultados.</p>
-            </div>
+            <p>Introduce los datos y realiza la simulación para ver los resultados.</p>
           )}
-          <Link to="/" className="btn btn-primary mt-3">
-            Volver al Menú Principal
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <button className="btn btn-primary w-100 mt-3" style={{ borderRadius: "8px", height: "40px" }}>Volver al Menú Principal</button>
           </Link>
         </div>
       </div>

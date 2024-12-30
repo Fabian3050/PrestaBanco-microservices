@@ -36,7 +36,18 @@ public class CreditEvaluationService {
         return creditEvaluation;
     }
 
-    public CreditEvaluationEntity updateCreditEvaluation(CreditEvaluationEntity creditEvaluation){
+    public CreditEvaluationEntity updateCreditEvaluation(CreditEvaluationEntity creditEvaluation, Long creditId){
+        RestTemplate restTemplate = new RestTemplate();
+        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
+        credit.setCreditEvaluationId(creditEvaluation.getId());
+        creditEvaluation.setCreditId(creditId);
+        creditEvaluation.setRatioFeeIncome(creditEvaluation.getRatioFeeIncome());
+        creditEvaluation.setCreditHistory(creditEvaluation.getCreditHistory());
+        creditEvaluation.setJobSeniority(creditEvaluation.getJobSeniority());
+        creditEvaluation.setRatioDebtIncome(creditEvaluation.getRatioDebtIncome());
+        creditEvaluation.setMaximumFinancingAmount(creditEvaluation.getMaximumFinancingAmount());
+        creditEvaluation.setApplicantAge(creditEvaluation.getApplicantAge());
+        creditEvaluation.setSavingCapacity(creditEvaluation.getSavingCapacity());
         return creditEvaluationRepository.save(creditEvaluation);
     }
 

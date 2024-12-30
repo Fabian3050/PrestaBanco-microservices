@@ -9,11 +9,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
 import creditService from "../services/credit.service";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import statusService from "../services/status.service";
 import userService from "../services/user.service";
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 import { format } from "date-fns";
 
 const CreditEvaluationList = () => {
@@ -100,13 +102,19 @@ const CreditEvaluationList = () => {
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Solicitudes de Crédito del Sistema</h2>
 
       <TextField
-        label="Buscar por RUT"
-        variant="outlined"
-        value={searchTerm}
-        onChange={handleSearch}
-        fullWidth
-        sx={{ marginBottom: "1.5rem" }}
-      />
+          label="Buscar por RUT o Nombre"
+          variant="outlined"
+          fullWidth
+          onChange={handleSearch}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ mb: 2, borderRadius: "20px" }}
+        />
 
       <Table stickyHeader aria-label="sticky table">
         <TableHead>
@@ -146,9 +154,10 @@ const CreditEvaluationList = () => {
                     size="small"
                     onClick={handleEvaluate}
                     startIcon={<ArrowForwardIosIcon />}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
                     sx={{ marginBottom: "5px" }}
                   >
-                    Evaluar
+                    Evaluar Solicitud
                   </Button>
                   <Button
                     variant="contained"
@@ -156,14 +165,16 @@ const CreditEvaluationList = () => {
                     size="small"
                     onClick={() => modifiedStatus(credit.id)}
                     startIcon={<ArrowForwardIosIcon />}
-                    sx={{ marginBottom: "5px", marginLeft: "10px" }}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    sx={{ marginBottom: "5px" }}
                   >
-                    Modificar
+                    Modificar Estado
                   </Button>
                   <Button
                     variant="contained"
                     color="error"
                     size="small"
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
                     onClick={() => handleDelete(credit.id)}
                     startIcon={<DeleteIcon />}
                   >

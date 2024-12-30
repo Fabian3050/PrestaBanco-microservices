@@ -128,14 +128,14 @@ const CreditListByUser = () => {
                     style={{ borderRadius: "8px", marginRight: "10px" }}
                     startIcon={<DeleteIcon />}
                   >
-                    Eliminar
+                    Eliminar Solicitud
                   </Button>
                   <Button
                     variant="contained"
                     color="success"
                     size="small"
                     onClick={() => calcularCostosTotales(credit.id)}
-                    style={{ borderRadius: "8px" }}
+                    style={{ borderRadius: "8px", marginRight: "10px" }}
                   >
                     Calcular Costos Totales
                   </Button>

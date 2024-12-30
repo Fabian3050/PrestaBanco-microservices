@@ -36,9 +36,9 @@ public class CreditEvaluationController {
         return ResponseEntity.ok(newCreditEvaluation);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<CreditEvaluationEntity> updateCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation){
-        CreditEvaluationEntity updatedCreditEvaluation = creditEvaluationService.updateCreditEvaluation(creditEvaluation);
+    @PutMapping("/{creditId}")
+    public ResponseEntity<CreditEvaluationEntity> updateCreditEvaluation(@RequestBody CreditEvaluationEntity creditEvaluation, @PathVariable("creditId") Long creditId){
+        CreditEvaluationEntity updatedCreditEvaluation = creditEvaluationService.updateCreditEvaluation(creditEvaluation, creditId);
         return  ResponseEntity.ok(updatedCreditEvaluation);
     }
 

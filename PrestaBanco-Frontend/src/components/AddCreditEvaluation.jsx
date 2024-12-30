@@ -6,17 +6,15 @@ import { Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 const CreditEvaluation = () => {
   const { creditId } = useParams();
   const [evaluation, setEvaluation] = useState({
-     ratioFeeIncome : false,
-    creditHistory : false,
-    jobSeniority : false,
-    ratioDebtIncome : false,
-    maximumFinancingAmount  : false,
-    applicantAge : false,
-    savingCapacity : false,
-    // Agrega aquí los otros atributos que quieres evaluar
+    "Relación Cuota-Ingreso": false,
+    "Historial de Crédito": false,
+    "Antigüedad Laboral": false,
+    "Relación Deuda-Ingreso": false,
+    "Monto Máximo de Financiamiento": false,
+    "Edad del Solicitante": false,
+    "Capacidad de Ahorro": false,
   });
 
-  // Cargar la evaluación de crédito al montar el componente
   useEffect(() => {
     const fetchEvaluation = async () => {
       try {
@@ -30,12 +28,10 @@ const CreditEvaluation = () => {
     fetchEvaluation();
   }, [creditId]);
 
-  // Manejar el cambio de estado del interruptor
   const handleSwitchChange = async (field) => {
     const updatedEvaluation = { ...evaluation, [field]: !evaluation[field] };
-    setEvaluation(updatedEvaluation); // Actualiza el estado local
+    setEvaluation(updatedEvaluation);
 
-    // Actualiza la evaluación en el backend
     try {
       await creditEvaluationService.update(updatedEvaluation);
     } catch (error) {
@@ -44,34 +40,50 @@ const CreditEvaluation = () => {
   };
 
   return (
-    <TableContainer component={Paper} className="mt-5">
-      <h2 className="text-center">Evaluación de Crédito</h2>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Criterio</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Estado</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.keys(evaluation).map((field) => (
-            <TableRow key={field}>
-              <TableCell align="left">{field}</TableCell>
-              <TableCell align="left">
-                <Switch
-                  checked={evaluation[field]}
-                  onChange={() => handleSwitchChange(field)}
-                  color="primary"
-                />
-              </TableCell>
+    <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
+      <header style={{ textAlign: "center", marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "2rem", color: "#0d47a1" }}>Evaluación de Crédito</h1>
+      </header>
+
+      <TableContainer
+        component={Paper}
+        style={{ borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: "20px" }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow style={{ backgroundColor: "#e3f2fd" }}>
+              <TableCell align="left" style={{ fontWeight: "bold" }}>Criterio</TableCell>
+              <TableCell align="center" style={{ fontWeight: "bold" }}>Estado</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link to="/executive" className="btn btn-primary mt-3">
-        Volver a la lista de créditos
-      </Link>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {Object.keys(evaluation).map((field) => (
+              <TableRow key={field} style={{ backgroundColor: "#f9f9f9" }}>
+                <TableCell align="left" style={{ padding: "10px 20px" }}>{field}</TableCell>
+                <TableCell align="center">
+                  <Switch
+                    checked={evaluation[field]}
+                    onChange={() => handleSwitchChange(field)}
+                    color="primary"
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <Link to="/executive" style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: "8px", padding: "10px 20px" }}
+            >
+              Volver a la lista de créditos
+            </Button>
+          </Link>
+        </div>
+      </TableContainer>
+    </div>
   );
 };
 

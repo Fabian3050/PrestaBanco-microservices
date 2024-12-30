@@ -12,8 +12,8 @@ const getById = id => {
     return httpClient.get(`/user/get/${id}`);
 }
 
-const update = data => {
-    return httpClient.put('/user/', data);
+const update = (data,userId) => {
+    return httpClient.put(`/user/${userId}`,data);
 }
 
 const remove = id => {

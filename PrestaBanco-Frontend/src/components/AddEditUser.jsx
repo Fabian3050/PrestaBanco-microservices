@@ -20,13 +20,36 @@ const AddUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const validateFields = () => {
+    const missingFields = [];
+    if (!rut) missingFields.push("RUT");
+    if (!name) missingFields.push("Nombre");
+    if (!lastName) missingFields.push("Apellido");
+    if (!salary) missingFields.push("Salario");
+    if (!address) missingFields.push("Dirección");
+
+    if (missingFields.length > 0) {
+      alert(`Por favor complete los siguientes campos obligatorios: ${missingFields.join(", ")}`);
+      return false;
+    }
+
+    if (salary <= 0) {
+      alert("El salario debe ser un valor positivo.");
+      return false;
+    }
+
+    return true;
+  };
+
   const saveUser = (u) => {
     u.preventDefault();
+
+    if (!validateFields()) return;
 
     const user = { rut, name, secondName, lastName, secondLastName, salary, address };
     if (id) {
       userService
-        .update(user) // Paso el ID aquí en lugar de dentro del objeto
+        .update(user, id)
         .then((response) => {
           console.log("Usuario actualizado correctamente", response.data);
           navigate("/user/list");
@@ -60,7 +83,7 @@ const AddUser = () => {
       userService
         .getById(id)
         .then((user) => {
-          setRut(formatRut(user.data.rut)); // Aplica formato al RUT al cargar
+          setRut(formatRut(user.data.rut));
           setName(user.data.name);
           setSecondName(user.data.secondName);
           setLastName(user.data.lastName);
@@ -72,7 +95,7 @@ const AddUser = () => {
           console.log("Se ha producido un error.", error);
         });
     }
-  }, [id]); // Agrega `id` como dependencia
+  }, [id]);
 
   return (
     <Box
@@ -81,99 +104,110 @@ const AddUser = () => {
       alignItems="center"
       justifyContent="center"
       component="form"
-      onSubmit={saveUser} // Cambia el evento aquí para manejar la acción de guardado
+      onSubmit={saveUser}
+      style={{ backgroundColor: "#f0f8ff", padding: "30px", borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}
     >
-      <h3>{titleUserForm}</h3>
-      <hr />
-      <FormControl fullWidth>
+      <h3 style={{ color: "#0d47a1", marginBottom: "20px" }}>{titleUserForm}</h3>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="rut"
           label="RUT"
           value={rut}
-          variant="standard"
-          onChange={(e) => setRut(formatRut(e.target.value))} // Aplica formato al cambiar
+          variant="outlined"
+          onChange={(e) => setRut(formatRut(e.target.value))}
           helperText="Ej. 12.345.678-9"
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="name"
-          label="Name"
+          label="Nombre"
           value={name}
-          variant="standard"
+          variant="outlined"
           onChange={(e) => setName(e.target.value)}
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="secondName"
-          label="Second Name"
+          label="Segundo Nombre"
           value={secondName}
-          variant="standard"
+          variant="outlined"
           onChange={(e) => setSecondName(e.target.value)}
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="lastName"
-          label="Last Name"
+          label="Apellido"
           value={lastName}
-          variant="standard"
+          variant="outlined"
           onChange={(e) => setLastName(e.target.value)}
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="secondLastName"
-          label="Second Last Name"
+          label="Segundo Apellido"
           value={secondLastName}
-          variant="standard"
+          variant="outlined"
           onChange={(e) => setSecondLastName(e.target.value)}
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="address"
-          label="Address"
+          label="Dirección"
           value={address}
-          variant="standard"
+          variant="outlined"
           onChange={(e) => setAddress(e.target.value)}
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
-      <FormControl fullWidth>
+      <FormControl fullWidth style={{ marginBottom: "15px" }}>
         <TextField
           id="salary"
-          label="Salary"
+          label="Salario"
           type="number"
           value={salary}
-          variant="standard"
-          onChange={(e) => setSalary(e.target.value)}
+          variant="outlined"
+          onChange={(e) => setSalary(Math.max(0, e.target.value))}
           helperText="Salario mensual en Pesos Chilenos"
+          style={{ borderRadius: "10px" }}
         />
       </FormControl>
 
       <FormControl>
-        <br />
         <Button
           type="submit"
           variant="contained"
           color="info"
-          style={{ marginLeft: "0.5rem" }}
+          style={{ margin: "10px 0", borderRadius: "8px", padding: "10px 20px" }}
           startIcon={<SaveIcon />}
         >
           Grabar
         </Button>
       </FormControl>
 
-      <hr />
-      <Link to="/" className="btn btn-primary mt-3">
-        Volver al Menú Principal
+      <Link to="/" style={{ textDecoration: "none", marginTop: "15px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ borderRadius: "8px", padding: "10px 20px" }}
+        >
+          Volver al Menú Principal
+        </Button>
       </Link>
     </Box>
   );
