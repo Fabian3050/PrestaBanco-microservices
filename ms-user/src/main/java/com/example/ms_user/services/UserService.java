@@ -25,8 +25,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserEntity updateUser(UserEntity user){
-        return userRepository.save(user);
+    public UserEntity updateUser(UserEntity user, Long id){
+        UserEntity newUser = null;
+        
+        for(UserEntity userEntity : userRepository.findAll()){
+            if(userEntity.getId().equals(id)){
+                userEntity.setName(user.getName());
+                userEntity.setSecondName(user.getSecondName());
+                userEntity.setLastName(user.getLastName());
+                userEntity.setSecondLastName(user.getSecondLastName());
+                userEntity.setSalary(user.getSalary());
+                userEntity.setRut(user.getRut());
+                userEntity.setAddress(user.getAddress());
+                newUser = userRepository.save(userEntity);
+            }
+        }
+        return newUser;
     }
 
     public boolean deleteUser(Long id) throws Exception {

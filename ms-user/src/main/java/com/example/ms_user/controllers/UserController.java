@@ -40,9 +40,9 @@ public class UserController {
         return ResponseEntity.ok(newUser);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity user){
-        UserEntity updatedUser = userService.updateUser(user);
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity user, @PathVariable("userId") Long userId){
+        UserEntity updatedUser = userService.updateUser(user, userId);
         return  ResponseEntity.ok(updatedUser);
     }
 

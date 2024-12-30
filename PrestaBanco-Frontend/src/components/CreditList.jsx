@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link , useNavigate} from "react-router-dom";
+import { useParams, Link , useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,16 +13,13 @@ import creditService from "../services/credit.service";
 import userService from "../services/user.service";
 import statusService from "../services/status.service";
 import totalCostService from "../services/totalCost.service";
+import { format } from "date-fns";
 
 const CreditListByUser = () => {
   const { userId } = useParams();
   const [credits, setCredits] = useState([]);
   const [userRut, setUserRut] = useState("");
   const [estadoSolicitudes, setEstadoSolicitudes] = useState({});
-  const [costoTotal, setCostoTotal] = useState(0);
-  const [creditLifeInsurance, setCreditLifeInsurance] = useState(0);
-  const [fireInsurance, setFireInsurance] = useState(0);
-  const [comission, setComission] = useState(0);
 
   const navigate = useNavigate();
 
@@ -83,79 +80,83 @@ const CreditListByUser = () => {
   };
 
   const calcularCostosTotales = async (creditId) => {
-    const totalCostData = {
-      totalCost: costoTotal, // Asegúrate de que 'costoTotal' esté definido y actualizado
-      creditLifeInsurance: creditLifeInsurance,
-      fireInsurance: fireInsurance,
-      comission: comission
-    };
-
     try {
-      const response = await totalCostService.create(totalCostData, creditId);
-      setCostoTotal(response.data.totalCost);
-      navigate('/totalCostCredit/' + response.data.id + '/' + userId);
+      navigate(`/totalCostCredit/${creditId}/${userId}`);
     } catch (error) {
-      console.error("Error al obtener el costo total:", error);
-      return null;
+      console.error("Error al calcular los costos totales:", error);
     }
   };
 
   return (
-    <TableContainer component={Paper} className="mt-5">
-      <h2 className="text-center">Solicitudes de Crédito del Usuario</h2>
-      <Table sx={{ minWidth: 650 }} size="medium" aria-label="credit table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Rut Cliente</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Monto Solicitado</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Tasa de Interés Anual</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Período de Pago (meses)</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Tipo de Crédito</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Fecha Creación Crédito</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Estado de la Solicitud</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Acciones</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {credits.map((credit) => (
-            <TableRow key={credit.id}>
-              <TableCell align="left">{userRut || "N/A"}</TableCell>
-              <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
-              <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
-              <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
-              <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
-              <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
-              <TableCell align="left">{estadoSolicitudes[credit.id] || "Sin seguimiento"}</TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="small mt-1"
-                  onClick={() => deleteCredit(credit.id)}
-                  style={{ marginLeft: "0.5rem" }}
-                  startIcon={<DeleteIcon />}
-                >
-                  Eliminar
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small mt-1"
-                  onClick={() => calcularCostosTotales(credit.id)}
-                  style={{ marginLeft: "0.5rem" }}
-                >
-                  Calcular costos totales
-                </Button>
-              </TableCell>
+    <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
+      <header style={{ textAlign: "center", marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "2rem", color: "#0d47a1", marginBottom: "10px" }}>Solicitudes de Crédito del Usuario</h1>
+      </header>
+      <TableContainer
+        component={Paper}
+        style={{ borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", padding: "20px" }}
+      >
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Rut Cliente</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Monto Solicitado</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Tasa de Interés Anual</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Período de Pago (meses)</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Tipo de Crédito</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Fecha Creación Crédito</TableCell>
+              <TableCell align="left" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Estado de la Solicitud</TableCell>
+              <TableCell align="center" style={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>Acciones</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Link to="/register/list" className="btn btn-primary mt-3">
-        Volver al registro de usuarios
-      </Link>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {credits.map((credit) => (
+              <TableRow key={credit.id} style={{ "&:nth-of-type(odd)": { backgroundColor: "#f9f9f9" }, "&:hover": { backgroundColor: "#e8f5e9", cursor: "pointer" } }}>
+                <TableCell align="left">{userRut || "N/A"}</TableCell>
+                <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
+                <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
+                <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
+                <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
+                <TableCell align="left">{credit.applicationDate ? format(new Date(credit.applicationDate), "dd/MM/yyyy HH:mm:ss") : "N/A"}</TableCell>
+                <TableCell align="left">{estadoSolicitudes[credit.id] || "Sin seguimiento"}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    onClick={() => deleteCredit(credit.id)}
+                    style={{ borderRadius: "8px", marginRight: "10px" }}
+                    startIcon={<DeleteIcon />}
+                  >
+                    Eliminar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick={() => calcularCostosTotales(credit.id)}
+                    style={{ borderRadius: "8px" }}
+                  >
+                    Calcular Costos Totales
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <Link to="/register/list" style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: "8px", padding: "10px 20px" }}
+            >
+              Volver al registro de usuarios
+            </Button>
+          </Link>
+        </div>
+      </TableContainer>
+    </div>
   );
 };
 

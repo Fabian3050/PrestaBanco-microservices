@@ -8,30 +8,33 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import creditService from "../services/credit.service";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import statusService from "../services/status.service";
 import userService from "../services/user.service";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { format } from "date-fns";
 
 const CreditEvaluationList = () => {
   const [credits, setCredits] = useState([]);
+  const [filteredCredits, setFilteredCredits] = useState([]);
   const [userRuts, setUserRuts] = useState({}); // Mantener los RUTs de los usuarios por id
   const [estadoSolicitud, setEstadoSolicitud] = useState({}); // Mantener el estado de solicitud por id de crédito
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const [userRut, setUserRut] = useState(""); // RUT del usuario actual
   const navigate = useNavigate();
 
   const init = async () => {
     try {
       const creditResponse = await creditService.getAll();
       setCredits(creditResponse.data);
+      setFilteredCredits(creditResponse.data);
     } catch (error) {
       console.error("Error al obtener las solicitudes de crédito:", error);
     }
   };
 
-  // Fetching datos asincrónicamente para cada crédito y usuario
   useEffect(() => {
     init();
   }, []);
@@ -43,27 +46,6 @@ const CreditEvaluationList = () => {
   const modifiedStatus = (id) => {
     navigate(`/executive/status/${id}`);
   };
-
-  useEffect(() => {
-    const fetchStatuses = async () => {
-      const statuses = {};
-      for (let credit of credits) {
-        try {
-          const statusResponse = await statusService.getByCreditId(credit.id);
-          statuses[credit.id] = statusResponse.data.status;
-        } catch (error) {
-          console.error("Error al obtener el estado de la solicitud:", error);
-        }
-      }
-      setEstadoSolicitud(statuses);
-    };
-
-    if (credits.length > 0) {
-      fetchStatuses();
-    }
-  }, [credits]);
-
-
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -88,19 +70,6 @@ const CreditEvaluationList = () => {
     }
   }, [credits]);
 
-  const fetchUserRut = async (userId) => {
-    try {
-      const response1 = await userService.getById(userId);
-      if (response1.data && response1.data.rut) {
-        setUserRuts(response1.data.rut);
-      } else {
-        console.error("No se encontró el RUT del usuario.");
-      }
-    } catch (error) {
-      console.error("Error al obtener los datos del usuario:", error);
-    }
-  };
-
   const handleDelete = (id) => {
     const confirmDelete = window.confirm("¿Está seguro que desea borrar esta solicitud de crédito?");
     if (confirmDelete) {
@@ -109,82 +78,107 @@ const CreditEvaluationList = () => {
         .then((response) => {
           console.log("La solicitud de crédito ha sido eliminada.", response.data);
           setCredits((prevCredits) => prevCredits.filter((credit) => credit.id !== id));
+          setFilteredCredits((prevCredits) => prevCredits.filter((credit) => credit.id !== id));
         })
         .catch((error) => {
           console.log("Se ha producido un error al intentar eliminar la solicitud de crédito", error);
         });
     }
-  }
+  };
+
+  const handleSearch = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+    const filtered = credits.filter((credit) =>
+      userRuts[credit.userId]?.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredCredits(filtered);
+  };
 
   return (
-    <TableContainer component={Paper} className="mt-5">
-      <h2 className="text-center">Solicitudes de Crédito del Sistema</h2>
-      <Table sx={{ minWidth: 650 }} size="medium" aria-label="credit table">
+    <TableContainer component={Paper} sx={{ borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", p: 3, backgroundColor: "#f0f8ff" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Solicitudes de Crédito del Sistema</h2>
+
+      <TextField
+        label="Buscar por RUT"
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+        fullWidth
+        sx={{ marginBottom: "1.5rem" }}
+      />
+
+      <Table stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Rut Cliente</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Monto Solicitado</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Costo Total Credito</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Tasa de Interés</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Período de Pago (meses)</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Tipo de Crédito</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Fecha Creación Crédito</TableCell>
             <TableCell align="left" sx={{ fontWeight: "bold" }}>Estado de la solicitud</TableCell>
-            <TableCell align="left" sx={{ fontWeight: "bold" }}>Acciones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold" }}>Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {credits.map((credit) => {
+          {filteredCredits.map((credit) => {
             return (
-              <TableRow key={credit.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableRow
+                key={credit.id}
+                sx={{ "&:nth-of-type(odd)": { backgroundColor: "#f9f9f9" }, "&:hover": { backgroundColor: "#e8f5e9", cursor: "pointer" } }}
+              >
                 <TableCell align="left">
                   {userRuts[credit.userId] || "N/A"} {/* Mostrar el RUT correspondiente */}
                 </TableCell>
                 <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
-                <TableCell align="left">{credit.totalCost || "N/A"}</TableCell>
                 <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
                 <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
                 <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
-                <TableCell align="left">{credit.applicationDate || "N/A"}</TableCell>
+                <TableCell align="left">
+                  {credit.applicationDate ? format(new Date(credit.applicationDate), "dd/MM/yyyy HH:mm:ss") : "N/A"}
+                </TableCell>
                 <TableCell align="left">{estadoSolicitud[credit.id] || "Sin seguimiento"}</TableCell> {/* Mostrar el estado correspondiente */}
-                <TableCell>
+                <TableCell align="center">
                   <Button
                     variant="contained"
                     color="primary"
                     size="small"
                     onClick={handleEvaluate}
                     startIcon={<ArrowForwardIosIcon />}
+                    sx={{ marginBottom: "5px" }}
                   >
-                    Evaluar Credito
+                    Evaluar
                   </Button>
                   <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     size="small"
                     onClick={() => modifiedStatus(credit.id)}
                     startIcon={<ArrowForwardIosIcon />}
-                    style={{ marginTop: "8px" }}
+                    sx={{ marginBottom: "5px", marginLeft: "10px" }}
                   >
-                    Modificar estado solicitud
+                    Modificar
                   </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="small"
-                  onClick={() => handleDelete(credit.id)}
-                  startIcon={<DeleteIcon />}
-                  style={{ marginTop: "8px" }}
-                >
-                  Eliminar Credito
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    onClick={() => handleDelete(credit.id)}
+                    startIcon={<DeleteIcon />}
+                  >
+                    Eliminar
+                  </Button>
                 </TableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
-      <Link to="/" className="btn btn-primary mt-3">
-        Volver al menú Principal
+      <Link to="/" style={{ textDecoration: "none" }}>
+        <Button variant="contained" color="primary" fullWidth sx={{ marginTop: "20px" }}>
+          Volver al Menú Principal
+        </Button>
       </Link>
     </TableContainer>
   );
