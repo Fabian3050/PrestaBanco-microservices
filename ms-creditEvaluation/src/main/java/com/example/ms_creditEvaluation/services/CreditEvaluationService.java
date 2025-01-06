@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CreditEvaluationService {
@@ -29,11 +30,13 @@ public class CreditEvaluationService {
     }
 
     public CreditEvaluationEntity getCreditEvaluationByCreditId(Long creditId){
-        RestTemplate restTemplate = new RestTemplate();
-        CreditEntity credit = restTemplate.getForObject("http://localhost:8080/credit/getById/" + creditId, CreditEntity.class);
-        Long creditEvaluationId = credit.getCreditEvaluationId();
-        CreditEvaluationEntity creditEvaluation = creditEvaluationRepository.findById(creditEvaluationId).get();
-        return creditEvaluation;
+        List<CreditEvaluationEntity> creditEvaluations = creditEvaluationRepository.findAll();
+        for(CreditEvaluationEntity creditEvaluation : creditEvaluations){
+            if(creditEvaluation.getCreditId().equals(creditId)){
+                return creditEvaluation;
+            }
+        }
+        return null;
     }
 
     public CreditEvaluationEntity updateCreditEvaluation(CreditEvaluationEntity creditEvaluation, Long creditId){

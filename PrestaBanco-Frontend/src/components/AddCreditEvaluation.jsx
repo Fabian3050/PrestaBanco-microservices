@@ -33,6 +33,8 @@ const CreditEvaluation = () => {
   });
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadFiles, setUploadFiles] = useState({});
+  const [isUploading, setIsUploading] = useState(false);
+
 
   useEffect(() => {
     const fetchEvaluation = async () => {
@@ -50,7 +52,7 @@ const CreditEvaluation = () => {
 
     const fetchFiles = async () => {
       try {
-        const response = await creditEvaluationService.getUploadedFiles(creditId);
+        const response = await documentService.getAllByCreditId(creditId);
         if (response?.data) {
           setUploadedFiles(response.data);
         } else {
@@ -86,19 +88,23 @@ const CreditEvaluation = () => {
       alert("Por favor selecciona un archivo antes de subir.");
       return;
     }
-
+  
+    setIsUploading(true); // Mostrar indicador de carga
+  
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("field", field);
+      formData.append("doc", field);
       formData.append("creditId", creditId);
-
-      await creditEvaluationService.uploadFile(formData);
+  
+      await documentService.create(formData, creditId);
       alert("Archivo subido exitosamente.");
       setUploadFiles({ ...uploadFiles, [field]: null });
     } catch (error) {
       console.error("Error al subir el archivo:", error);
       alert("Hubo un error al subir el archivo.");
+    } finally {
+      setIsUploading(false); // Ocultar indicador de carga
     }
   };
 

@@ -52,17 +52,21 @@ const CreditEvaluationList = () => {
   }, []);
 
   const handleEvaluate = (creditId) => {
-    const evaluateData = {
-      ratioFeeIncome ,
-      creditHistory,
-      jobSeniority,
-      ratioDebtIncome,
-      maximumFinancingAmount,
-      applicantAge,
-      savingCapacity,
-    };
-    creditEvaluationService.create(creditId, evaluateData);
-    navigate("/executive/creditEvaluation/" + creditId);
+    creditEvaluationService.create(creditId, {
+      "Relación Cuota-Ingreso": false,
+      "Historial de Crédito": false,
+      "Antigüedad Laboral": false,
+      "Relación Deuda-Ingreso": false,
+      "Monto Máximo de Financiamiento": false,
+      "Edad del Solicitante": false,
+      "Capacidad de Ahorro": false,
+    })
+      .then(() => {
+        navigate(`/executive/creditEvaluation/${creditId}`);
+      })
+      .catch((error) => {
+        console.error("Error al crear la evaluación de crédito:", error);
+      });
   };
 
   const modifiedStatus = (id) => {
@@ -206,6 +210,16 @@ const CreditEvaluationList = () => {
                     startIcon={<DeleteIcon />}
                   >
                     Eliminar
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="info"
+                    size="small"
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    onClick={() => navigate(`/executive/creditEvaluation/${credit.id}`)}
+                    >
+                    Ver Evaluación
                   </Button>
                 </TableCell>
               </TableRow>
