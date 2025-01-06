@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import creditService from "../services/credit.service"; // Importa el servicio que realiza la llamada al backend
+import { Modal, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+
+
 
 const CreditRequestForm = () => {
   const navigate = useNavigate();
@@ -12,12 +17,51 @@ const CreditRequestForm = () => {
   const [interestRate, setInterestRate] = useState("");
   const [requestedAmount, setRequestedAmount] = useState("");
   const [totalPriceHome, setTotalPriceHome] = useState("");
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showHelpModalPeriod, setShowHelpModalPeriod] = useState(false);
 
-  // Maneja la solicitud de crédito
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = [];
 
-    // Datos que se envían al backend
+    const missingFields = [];
+    if (!requestedAmount || requestedAmount <= 0) missingFields.push("Monto del Préstamo (debe ser un valor positivo)");
+    if (!interestRate || interestRate <= 0) missingFields.push("Tasa de Interés Anual (debe ser un valor positivo)");
+    if (!maxTerm || maxTerm <= 0) missingFields.push("Período de Pago (debe ser un valor positivo)");
+    if (!totalPriceHome || totalPriceHome <= 0) missingFields.push("Precio Total de la Vivienda (debe ser un valor positivo)");
+    if (!creditType) missingFields.push("Tipo de Crédito");
+
+    if (missingFields.length > 0) {
+      alert(`Por favor, complete los siguientes campos: \n${missingFields.join("\n")}`);
+      return;
+    }
+
+    switch (creditType) {
+      case "firstHome":
+        if (maxTerm > 360) errors.push("El período de pago no puede superar los 360 meses para Primera Vivienda.");
+        if (interestRate < 3.5 || interestRate > 5) errors.push("La tasa de interés debe estar entre 3.5% y 5% para Primera Vivienda.");
+        break;
+      case "secondHome":
+        if (maxTerm > 240) errors.push("El período de pago no puede superar los 240 meses para Segunda Vivienda.");
+        if (interestRate < 4 || interestRate > 6) errors.push("La tasa de interés debe estar entre 4% y 6% para Segunda Vivienda.");
+        break;
+      case "commercialProperty":
+        if (maxTerm > 300) errors.push("El período de pago no puede superar los 300 meses para Propiedades Comerciales.");
+        if (interestRate < 5 || interestRate > 7) errors.push("La tasa de interés debe estar entre 5% y 7% para Propiedades Comerciales.");
+        break;
+      case "remodeling":
+        if (maxTerm > 180) errors.push("El período de pago no puede superar los 180 meses para Remodelación.");
+        if (interestRate < 4.5 || interestRate > 6) errors.push("La tasa de interés debe estar entre 4.5% y 6% para Remodelación.");
+        break;
+      default:
+        errors.push("Por favor selecciona un tipo de crédito válido.");
+    }
+
+    if (errors.length > 0) {
+      alert(`Consideraciones para la solicitud de crédito:\n${errors.join("\n")}`);
+      return;
+    }
+
     const creditData = {
       creditType,
       maxTerm,
@@ -27,15 +71,13 @@ const CreditRequestForm = () => {
     };
 
     try {
-      // Realiza la solicitud de creación de crédito usando el servicio y captura el ID devuelto
-      const createdId = await creditService.create(userId, creditData); // Se asume que `create` devuelve solo el ID
+      const createdId = await creditService.create(userId, creditData); 
       if (!createdId) {
         alert("Error al crear el crédito.");
         return;
       } else {
         console.log("Crédito creado exitosamente con ID:", createdId);
         alert("Solicitud de crédito creada exitosamente.");
-        // Redirige a la interfaz de subida de archivos, pasando el ID del crédito
         navigate(`/upload-documents/${createdId}/${creditType}`);
       }
     } catch (error) {
@@ -50,9 +92,10 @@ const CreditRequestForm = () => {
 
   return (
     <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <h1>Solicitud de Crédito</h1>
-        <p>Por favor, complete el formulario para solicitar su crédito.</p>
+      <div style={{ textAlign: "center",marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "3rem", color: "#0d47a1", marginBottom: "10px" }}>Solicitud de Crédito</h1>
+        <p style={{ fontSize: "1.2rem", color: "#555" }}>Complete los campos solicitados para poder realizar la solicitud de crédito,
+          si tiene dudas del proceso, no dude en consultar en el apartado preguntas frecuentes en la pagina principal de Presta Banco.</p>
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "20px" }}>
@@ -69,20 +112,31 @@ const CreditRequestForm = () => {
           onSubmit={handleSubmit}
         >
           <div className="mb-3">
-            <label htmlFor="loanAmount" className="form-label">Monto del Préstamo:</label>
+            <label htmlFor="loanAmount" className="form-label">Monto del Préstamo (Ej: "100000000", sin puntos ni coma):</label>
             <input
               type="number"
               id="loanAmount"
               className="form-control"
               value={requestedAmount}
-              onChange={(e) => setRequestedAmount(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, ""); // Remover caracteres no numéricos
+                setRequestedAmount(value);
+              }}
               required
               style={{ marginBottom: "15px", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
             />
           </div>
 
           <div className="mb-3">
-            <label htmlFor="interestRate" className="form-label">Tasa de Interés Anual(%):</label>
+            <label htmlFor="interestRate" className="form-label">Tasa de Interés Anual(%):
+            <Button
+                  variant="link"
+                  style={{ textDecoration: "none", color: "#0d47a1" }}
+                  onClick={() => setShowHelpModal(true)}
+                >
+                  <FontAwesomeIcon icon={faCircleQuestion} />
+            </Button>
+            </label>
             <input
               type="number"
               id="interestRate"
@@ -96,7 +150,15 @@ const CreditRequestForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="paymentPeriod" className="form-label">Período de Pago (meses):</label>
+            <label htmlFor="paymentPeriod" className="form-label">Período de Pago (meses):
+            <Button
+                  variant="link"
+                  style={{ textDecoration: "none", color: "#0d47a1" }}
+                  onClick={() => setShowHelpModalPeriod(true)}
+                >
+                  <FontAwesomeIcon icon={faCircleQuestion} />
+                </Button>
+            </label>
             <input
               type="number"
               id="paymentPeriod"
@@ -109,13 +171,16 @@ const CreditRequestForm = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="totalPriceHome" className="form-label">Precio Total de la Vivienda:</label>
+            <label htmlFor="totalPriceHome" className="form-label">Precio Total de la Vivienda (Ej: "100000000", sin puntos ni coma):</label>
             <input
               type="number"
               id="totalPriceHome"
               className="form-control"
               value={totalPriceHome}
-              onChange={(e) => setTotalPriceHome(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, ""); // Remover caracteres no numéricos
+                setTotalPriceHome(value);
+              }}
               required
               style={{ marginBottom: "15px", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
             />
@@ -147,7 +212,6 @@ const CreditRequestForm = () => {
           </button>
         </form>
 
-        {/* Sección visual llamativa */}
         <div
           style={{
             flex: 1,
@@ -159,16 +223,51 @@ const CreditRequestForm = () => {
             textAlign: "center",
           }}
         >
-          <h2 style={{ color: "#0d47a1", marginBottom: "20px" }}>¿Por qué solicitar un crédito?</h2>
+          <h2 style={{ color: "#0d47a1", marginBottom: "20px" }}>¿Por qué solicitar un crédito inmobiliario?</h2>
           <p>Con nuestro sistema, puedes obtener financiamiento para tus necesidades de vivienda, remodelación, y más.</p>
           <p>Disfruta de tasas competitivas y períodos de pago flexibles.</p>
           <img
-            src="https://unsplash.com/es/fotos/una-casa-con-una-puerta-de-entrada-azul-y-una-puerta-de-entrada-marron-xaqsFfoEq3o"
-            alt="Ilustración de crédito"
-            style={{ marginTop: "20px", borderRadius: "10px" }}
+            src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Cambiado a una imagen de oficina hogareña con un computador
+            alt="Oficina hogareña con computador"
+            style={{ marginTop: "20px", borderRadius: "10px", width: "100%", height: "auto" }}
           />
+
         </div>
       </div>
+            {/* Ventana emergente de ayuda */}
+            <Modal show={showHelpModal} onHide={() => setShowHelpModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ayuda - Tasa de Interés</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          - Si selecciona "Primera Vivienda" como tipo de crédito, el rango de tasa de interés debe estar entre un 3.5% y un 5%. <br />
+          - Si selecciona "Segunda Vivienda" como tipo de crédito, el rango de tasa de interés debe estar entre un 4% y un 6%. <br />
+          - Si selecciona "Propiedad Comercial" como tipo de crédito, el rango de tasa de interés debe estar entre un 5% y un 7%. <br />
+          - Si selecciona "Remodelación" como tipo de crédito, el rango de tasa de interés debe estar entre un 4.5% y un 6%. <br />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowHelpModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showHelpModalPeriod} onHide={() => setShowHelpModalPeriod(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ayuda - Periodo de Pago</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          - Si selecciona "Primera Vivienda" como tipo de crédito, el periodo de pago no puede superar los 360 meses. <br />
+          - Si selecciona "Segunda Vivienda" como tipo de crédito, el periodo de pago no puede superar los 240 meses. <br />
+          - Si selecciona "Propiedad Comercial" como tipo de crédito, el periodo de pago no puede superar los 300 meses. <br />
+          - Si selecciona "Remodelación" como tipo de crédito, el periodo de pago no puede superar los 180 meses. <br />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowHelpModalPeriod(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

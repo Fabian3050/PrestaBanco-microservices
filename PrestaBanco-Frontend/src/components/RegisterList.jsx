@@ -70,7 +70,10 @@ const RegisterList = () => {
 
   return (
     <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Usuarios registrados en el sistema</h1>
+      <h1 style={{ textAlign: "center", color: "#0d47a1", marginBottom: "20px" }}>Usuarios registrados en el sistema</h1>
+      <p style={{ fontSize: "1.2rem", color: "#555" }}>Si usted no está registrado, puede realizar el registro y posteriormente
+        solicitar un crédito para luego ver el historial de solicitudes realizadas.
+      </p>
 
       <TableContainer
         component={Paper}
@@ -128,10 +131,31 @@ const RegisterList = () => {
                 <TableCell align="left">{user.secondLastName}</TableCell>
                 <TableCell align="left">{user.salary}</TableCell>
                 <TableCell align="left">{user.address}</TableCell>
-                <TableCell align="center" style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+                <TableCell align="center" style={{ display: "flex", gap: "10px", justifyContent: "center",marginTop: "10px" }}>
+                <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "10px" }}>
+                <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick={() => handleRequestCredit(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<ArrowForwardIosIcon />}
+                  >
+                    Solicitar Crédito
+                  </Button>
                   <Button
                     variant="contained"
                     color="info"
+                    size="small"
+                    onClick={() => handleViewCredits(user.id)}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    startIcon={<ArrowForwardIosIcon />}
+                  >
+                    Solicitudes realizadas
+                  </Button>                 
+                  <Button
+                    variant="contained"
+                    color="primary"
                     size="small"
                     onClick={() => handleEdit(user.id)}
                     style={{ borderRadius: "8px", width: "150px", height: "40px" }}
@@ -142,40 +166,21 @@ const RegisterList = () => {
                   <Button
                     variant="contained"
                     color="error"
-                    size="medium"
+                    size="small"
                     onClick={() => handleDelete(user.id)}
                     style={{ borderRadius: "8px", width: "150px", height: "40px" }}
                     startIcon={<DeleteIcon />}
                   >
                     Eliminar
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    size="medium"
-                    onClick={() => handleRequestCredit(user.id)}
-                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
-                    startIcon={<ArrowForwardIosIcon />}
-                  >
-                    Solicitar Crédito
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    size="small"
-                    onClick={() => handleViewCredits(user.id)}
-                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
-                    startIcon={<ArrowForwardIosIcon />}
-                  >
-                    Solicitudes realizadas
-                  </Button>
+                </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
 
-        <Link to="/" className="btn btn-primary" style={{ textDecoration: "none", marginTop: "20px" }}>
+        <Link to="/" className="btn btn-secondary" style={{ textDecoration: "none", marginTop: "20px" }}>
           Volver al Menú Principal
         </Link>
       </TableContainer>

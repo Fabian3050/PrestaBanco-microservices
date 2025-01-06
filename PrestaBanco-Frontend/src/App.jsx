@@ -31,7 +31,7 @@ function App() {
             <Route path="/upload-documents/:creditId/:crediType" element = {<RequestCredit />} />
             <Route path="/user/:userId/credits" element = {<CreditList />} />
             <Route path="/executive" element = {<CreditEvaluationList />} />
-            <Route path="/executive/creditEvaluation" element = {<AddCreditEvaluation />} />
+            <Route path="/executive/creditEvaluation/:creditId" element = {<AddCreditEvaluation />} />
             <Route path="/executive/status/:creditId" element = {<ModifyStatus />} />
             <Route path="/totalCostCredit/:totalCostId/:userId" element = {<TotalcostResult />} />
             </Routes>

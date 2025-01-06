@@ -62,7 +62,8 @@ const ModifyStatus = () => {
           textAlign: "center",
         }}
       >
-        <h2 style={{ marginBottom: "1.5rem" }}>Modificar estado de la solicitud de crédito</h2>
+        <h2 style={{color: "#0d47a1" , marginBottom: "1.5rem" }}>Modificar estado de la solicitud de crédito</h2>
+        <p style={{ fontSize: "1.2rem", color: "#555" }}>Si ya existe un estado para el credito, seleccionar la opción para modificar el estado.</p>  
 
         <FormControl fullWidth sx={{ marginBottom: "1.5rem" }}>
           <InputLabel id="status-label">Estado</InputLabel>
@@ -99,6 +100,7 @@ const ModifyStatus = () => {
         </Box>
 
         <Button
+          color = "primary"
           variant="text"
           onClick={() => navigate("/executive")}
           sx={{ marginTop: "2rem" }}

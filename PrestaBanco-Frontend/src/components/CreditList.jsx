@@ -87,6 +87,13 @@ const CreditListByUser = () => {
     }
   };
 
+  const traduccionesTipoCredito = {
+    "firstHome": "Primera Vivienda",
+    "secondHome": "Segunda Vivienda",
+    "commercialProperty": "Propiedad Comercial",
+    "remodeling": "Remodelación"
+  };
+
   return (
     <div style={{ backgroundColor: "#f0f8ff", minHeight: "100vh", padding: "20px" }}>
       <header style={{ textAlign: "center", marginBottom: "20px" }}>
@@ -113,21 +120,22 @@ const CreditListByUser = () => {
             {credits.map((credit) => (
               <TableRow key={credit.id} style={{ "&:nth-of-type(odd)": { backgroundColor: "#f9f9f9" }, "&:hover": { backgroundColor: "#e8f5e9", cursor: "pointer" } }}>
                 <TableCell align="left">{userRut || "N/A"}</TableCell>
-                <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
+                <TableCell align="left">{"$" + credit.requestedAmount.toLocaleString("es-CL") || "N/A"}</TableCell>
                 <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
                 <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
-                <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
+                <TableCell align="left">{traduccionesTipoCredito[credit.creditType] || "N/A"}</TableCell>
                 <TableCell align="left">{credit.applicationDate ? format(new Date(credit.applicationDate), "dd/MM/yyyy HH:mm:ss") : "N/A"}</TableCell>
                 <TableCell align="left">{estadoSolicitudes[credit.id] || "Sin seguimiento"}</TableCell>
                 <TableCell align="center">
+                <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "10px" }}>
                   <Button
                     variant="contained"
                     color="error"
                     size="small"
                     onClick={() => deleteCredit(credit.id)}
-                    style={{ borderRadius: "8px", marginRight: "10px" }}
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
                     startIcon={<DeleteIcon />}
-                  >
+                    >
                     Eliminar Solicitud
                   </Button>
                   <Button
@@ -135,10 +143,11 @@ const CreditListByUser = () => {
                     color="success"
                     size="small"
                     onClick={() => calcularCostosTotales(credit.id)}
-                    style={{ borderRadius: "8px", marginRight: "10px" }}
-                  >
+                    style={{ borderRadius: "8px", width: "150px", height: "40px" }}
+                    >
                     Calcular Costos Totales
                   </Button>
+                </div>
                 </TableCell>
               </TableRow>
             ))}

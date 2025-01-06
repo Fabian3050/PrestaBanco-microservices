@@ -52,7 +52,7 @@ const AddUser = () => {
         .update(user, id)
         .then((response) => {
           console.log("Usuario actualizado correctamente", response.data);
-          navigate("/user/list");
+          navigate("/register/list");
         })
         .catch((error) => {
           console.log("Ha ocurrido un error al intentar actualizar datos del usuario.", error);
@@ -192,21 +192,21 @@ const AddUser = () => {
         <Button
           type="submit"
           variant="contained"
-          color="info"
+          color="success"
           style={{ margin: "10px 0", borderRadius: "8px", padding: "10px 20px" }}
           startIcon={<SaveIcon />}
         >
-          Grabar
+          Guardar
         </Button>
       </FormControl>
 
-      <Link to="/" style={{ textDecoration: "none", marginTop: "15px" }}>
+      <Link to="/register/list" style={{ textDecoration: "none", marginTop: "15px" }}>
         <Button
           variant="contained"
           color="primary"
           style={{ borderRadius: "8px", padding: "10px 20px" }}
         >
-          Volver al Menú Principal
+          Ir a la lista de registrados
         </Button>
       </Link>
     </Box>

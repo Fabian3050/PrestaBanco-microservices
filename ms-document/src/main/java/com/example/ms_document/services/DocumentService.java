@@ -68,11 +68,14 @@ public class DocumentService {
     }
 
     public List<DocumentDto> getAllDocumentsByCreditId(Long creditId) {
-        Optional<List<DocumentEntity>> documents = documentRepository.findAllByCreditId(creditId);
-
-        return documents.get().stream()
-                .map(this::convertDocumentToDTO)
-                .collect(Collectors.toList());
+        List<DocumentEntity> documents = documentRepository.findAll();
+        List<DocumentDto> documentDTOs = new ArrayList<>();
+        for(DocumentEntity document : documents){
+            if(document.getCreditId().equals(creditId)){
+                documentDTOs.add(convertDocumentToDTO(document));
+            }
+        }
+        return documentDTOs;
     }
 
     public DocumentDto convertDocumentToDTO(DocumentEntity document) {

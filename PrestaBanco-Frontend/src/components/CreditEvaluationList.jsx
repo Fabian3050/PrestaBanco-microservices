@@ -14,6 +14,7 @@ import creditService from "../services/credit.service";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import statusService from "../services/status.service";
 import userService from "../services/user.service";
+import creditEvaluationService from "../services/creditEvaluation.service";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import { format } from "date-fns";
@@ -24,6 +25,15 @@ const CreditEvaluationList = () => {
   const [userRuts, setUserRuts] = useState({}); // Mantener los RUTs de los usuarios por id
   const [estadoSolicitud, setEstadoSolicitud] = useState({}); // Mantener el estado de solicitud por id de crédito
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Estados para almacenar los valores de la evaluación de crédito
+  const [ratioFeeIncome, setRatioFeeIncome] = useState(false);
+  const [creditHistory, setCreditHistory] = useState(false);
+  const [jobSeniority, setJobSeniority] = useState(false);
+  const [ratioDebtIncome, setRatioDebtIncome] = useState(false);
+  const [maximumFinancingAmount, setMaximumFinancingAmount] = useState(false);
+  const [applicantAge, setApplicantAge] = useState(false);
+  const [savingCapacity, setSavingCapacity] = useState(false);
 
   const navigate = useNavigate();
 
@@ -41,8 +51,18 @@ const CreditEvaluationList = () => {
     init();
   }, []);
 
-  const handleEvaluate = () => {
-    navigate("/executive/creditEvaluation");
+  const handleEvaluate = (creditId) => {
+    const evaluateData = {
+      ratioFeeIncome ,
+      creditHistory,
+      jobSeniority,
+      ratioDebtIncome,
+      maximumFinancingAmount,
+      applicantAge,
+      savingCapacity,
+    };
+    creditEvaluationService.create(creditId, evaluateData);
+    navigate("/executive/creditEvaluation/" + creditId);
   };
 
   const modifiedStatus = (id) => {
@@ -97,12 +117,19 @@ const CreditEvaluationList = () => {
     setFilteredCredits(filtered);
   };
 
+  const traduccionesTipoCredito = {
+    "firstHome": "Primera Vivienda",
+    "secondHome": "Segunda Vivienda",
+    "commercialProperty": "Propiedad Comercial",
+    "remodeling": "Remodelación"
+  };
+
   return (
     <TableContainer component={Paper} sx={{ borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", p: 3, backgroundColor: "#f0f8ff" }}>
       <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Solicitudes de Crédito del Sistema</h2>
 
       <TextField
-          label="Buscar por RUT o Nombre"
+          label="Buscar por RUT"
           variant="outlined"
           fullWidth
           onChange={handleSearch}
@@ -139,10 +166,10 @@ const CreditEvaluationList = () => {
                 <TableCell align="left">
                   {userRuts[credit.userId] || "N/A"} {/* Mostrar el RUT correspondiente */}
                 </TableCell>
-                <TableCell align="left">{credit.requestedAmount || "N/A"}</TableCell>
+                <TableCell align="left">{"$" + credit.requestedAmount.toLocaleString("es-CL") || "N/A"}</TableCell>
                 <TableCell align="left">{credit.interestRate || "N/A"}</TableCell>
                 <TableCell align="left">{credit.maxTerm || "N/A"} meses</TableCell>
-                <TableCell align="left">{credit.creditType || "N/A"}</TableCell>
+                <TableCell align="left">{traduccionesTipoCredito[credit.creditType]|| "N/A"}</TableCell>
                 <TableCell align="left">
                   {credit.applicationDate ? format(new Date(credit.applicationDate), "dd/MM/yyyy HH:mm:ss") : "N/A"}
                 </TableCell>
@@ -152,7 +179,7 @@ const CreditEvaluationList = () => {
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={handleEvaluate}
+                    onClick={() => handleEvaluate(credit.id)}
                     startIcon={<ArrowForwardIosIcon />}
                     style={{ borderRadius: "8px", width: "150px", height: "40px" }}
                     sx={{ marginBottom: "5px" }}
